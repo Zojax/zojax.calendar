@@ -1,0 +1,26 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax.calendar">
+
+  <!-- events portlet -->
+  <zojax:pagelet
+     type="portlet.view"
+     for="..interfaces.IEventsPortlet"
+     template="eventsportlet.pt" />
+
+  <!-- calendar portlet -->
+  <zojax:pagelet
+     type="portlet.view"
+     for="..interfaces.ICalendarPortlet"
+     class=".portlet.CalendarPortletView" />
+
+  <!-- events list -->
+  <zojax:pagelet
+     name="events.html"
+     for="zope.app.component.interfaces.ISite"
+     template="events.pt"
+     class=".events.Events" />
+
+</configure>

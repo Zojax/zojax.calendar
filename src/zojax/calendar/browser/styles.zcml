@@ -1,0 +1,14 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax.calendar">
+
+  <!-- styles -->
+  <zojax:resourceinclude
+     name="zojax-calendar.css"
+     library="zojax"
+     type="stylesheet"
+     file="styles.css" filetype="zrt" />
+
+</configure>

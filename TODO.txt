@@ -1,0 +1,5 @@
+TODO list
+
+* Use zojax.table for events.html
+
+* Limit events search with preconfigured number of months

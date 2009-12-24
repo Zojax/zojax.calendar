@@ -1,0 +1,66 @@
+/* zrt-cssregistry: */
+
+@media all {
+
+  .portlet-calendar {
+    margin: 1px 0 1em 0;
+  }
+
+  .portlet-calendar .z-portlet-header {
+    background-color: globalBackgroundColor;
+    font-weight: normal;
+    text-align: center;
+    line-height: 1.6em;
+    border-bottom: none;
+    text-transform: none;
+  }
+  .portlet-calendar dd {
+    margin: 0;
+    padding: 0;
+  }
+  .portlet-calendar a {
+    text-decoration: none;
+  }
+  .portlet-calendar a:hover {
+    text-decoration: none;
+  }
+
+  .z-calendar {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+  }
+
+  .z-calendar td {
+    background-color: transparent;
+    width: 14%;
+    text-align: center;
+    padding: 2px;
+  }
+
+  .z-calendar .z-calendar-weekdays th {
+    background-color: globalBackgroundColor;
+    border: borderWidth borderStyle globalBorderColor;
+    border-style: borderStyle none;
+    text-align: center;
+    padding: 2px;
+    font-weight: normal;
+  }
+
+  .z-calendar .z-calendar-events {
+    background-color: globalBackgroundColor;
+    font-weight: bold;
+  }
+
+  .z-calendar .z-calendar-todayevents {
+    background-color: globalBackgroundColor;
+    border: 2px borderStyle notifyBorderColor;
+    font-weight: bold;
+  }
+
+  .z-calendar .z-calendar-today {
+    border-collapse: collapse;
+    border: 2px borderStyle notifyBorderColor;
+  }
+
+}

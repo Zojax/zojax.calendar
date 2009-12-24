@@ -1,0 +1,124 @@
+##############################################################################
+#
+# Copyright (c) 2009 Zope Foundation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Fri Nov 21 00:34:06 2008\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Nikolay Kim <fafhrd91@gmail.com>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: src/zojax/calendar/browser/calendarportlet.pt:12
+msgid "All events"
+msgstr "Все события"
+
+#: src/zojax/calendar/browser/calendarportlet.pt:16
+msgid "Next month"
+msgstr "Следующий месяц"
+
+#: src/zojax/calendar/browser/calendarportlet.pt:7
+msgid "Previous month"
+msgstr "Предыдущий месяц"
+
+#: src/zojax/calendar/browser/events.pt:12
+msgid "Date:"
+msgstr "Дата:"
+
+#: src/zojax/calendar/browser/events.pt:2
+msgid "Events"
+msgstr "События"
+
+#: src/zojax/calendar/browser/events.pt:23
+msgid "There are no events."
+msgstr "Событий нет."
+
+#: src/zojax/calendar/browser/eventsportlet.pt:16
+msgid "More..."
+msgstr "Еще..."
+
+#: src/zojax/calendar/configure.zcml:19
+msgid "Information about an upcoming event."
+msgstr "Информация о последующих событиях."
+
+#: src/zojax/calendar/configure.zcml:19
+#: src/zojax/calendar/browser/eventsportlet.pt:2
+msgid "Upcoming events"
+msgstr "Последующие события"
+
+#: src/zojax/calendar/configure.zcml:26
+msgid "A portlet displaying a calendar."
+msgstr "Портлет для отображения календаря."
+
+#: src/zojax/calendar/configure.zcml:9
+msgid "Site calendaring system."
+msgstr "Календарь для сайта."
+
+#: src/zojax/calendar/configure.zcml:9
+#: src/zojax/calendar/configure.zcml:26
+#: src/zojax/calendar/browser/calendarportlet.pt:23
+msgid "Calendar"
+msgstr "Календарь"
+
+#: src/zojax/calendar/interfaces.py:25
+msgid "Event dates are wrong."
+msgstr "Даты события непрвильные."
+
+#: src/zojax/calendar/interfaces.py:31
+msgid "Title"
+msgstr "Заголовок"
+
+#: src/zojax/calendar/interfaces.py:32
+msgid "Event title."
+msgstr "Заголовок события."
+
+#: src/zojax/calendar/interfaces.py:36
+msgid "Description"
+msgstr "Описание"
+
+#: src/zojax/calendar/interfaces.py:37
+msgid "A short summary of the event."
+msgstr "Короткое описание события."
+
+#: src/zojax/calendar/interfaces.py:41
+msgid "Event Starts"
+msgstr "Событие начинается"
+
+#: src/zojax/calendar/interfaces.py:45
+msgid "Event Ends"
+msgstr "Собатие заканчивается"
+
+#: src/zojax/calendar/interfaces.py:57
+msgid "Event Location"
+msgstr "Месторасположение"
+
+#: src/zojax/calendar/interfaces.py:69
+msgid "Count"
+msgstr "Колличество"
+
+#: src/zojax/calendar/interfaces.py:70
+msgid "Number of events in portlet."
+msgstr "Колличество событий в портлете"
+
+#: src/zojax/calendar/interfaces.py:79
+msgid "Use session"
+msgstr "Использовать сессию"
+
+#: src/zojax/calendar/interfaces.py:80
+msgid "Use session to store current year and month for portlet."
+msgstr "Использоваь сессию для хранения текущего года и месяца для портлета."
+
