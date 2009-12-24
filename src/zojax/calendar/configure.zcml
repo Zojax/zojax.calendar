@@ -1,0 +1,63 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:i18n="http://namespaces.zope.org/i18n"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   i18n_domain="zojax.calendar">
+
+  <zojax:product
+     name="zojax-calendar"
+     title="Calendar"
+     schema=".interfaces.ICalendarProduct"
+     class=".product.CalendarProduct"
+     description="Site calendaring system."
+     configurable="false" />
+
+  <interface
+     name="Event type"
+     interface=".interfaces.IEventType"
+     type="zojax.content.type.interfaces.IContentTypeType" />
+
+  <registerIn registry="zojax.product.zojax-calendar">
+    <zojax:portlet
+       name="portlet.events"
+       title="Upcoming events"
+       description="Information about an upcoming event."
+       class=".eventsportlet.EventsPortlet"
+       schema=".interfaces.IEventsPortlet" />
+
+    <zojax:portlet
+       name="portlet.calendar"
+       title="Calendar"
+       description="A portlet displaying a calendar."
+       class=".calendarportlet.CalendarPortlet"
+       schema=".interfaces.ICalendarPortlet" />
+
+    <!-- indexes -->
+    <utility
+       name="calendarEventStart"
+       provides="zojax.catalog.interfaces.ICatalogIndexFactory"
+       component=".product.indexEventStart" />
+
+    <utility
+       name="calendarEventDuration"
+       provides="zojax.catalog.interfaces.ICatalogIndexFactory"
+       component=".product.indexEventDuration" />
+
+    <!-- cache -->
+    <subscriber handler=".cache.eventHandler" />
+
+    <subscriber
+       for=".interfaces.IEventType
+	    zope.app.container.interfaces.IObjectMovedEvent"
+       handler=".cache.eventHandler" />
+
+    <!-- browser views -->
+    <include package=".browser" />
+  </registerIn>
+
+  <include package=".browser" file="styles.zcml" />
+
+  <!-- translations -->
+  <i18n:registerTranslations directory="locales"/>
+
+</configure>

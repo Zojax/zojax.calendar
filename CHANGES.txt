@@ -1,0 +1,90 @@
+=======
+CHANGES
+=======
+
+0.6.2 (2009-08-31)
+------------------
+
+- Update cache on event removing
+
+
+0.6.1 (2009-08-23)
+------------------
+
+- Simplify portlets cache keys
+
+- Check session before use
+
+
+0.6.0 (2009-08-19)
+------------------
+
+- Added caching for events and calendar portlet and event.html view
+
+
+0.5.5 (2009-08-12)
+------------------
+
+- Normalized datetime catalog index use
+
+
+0.5.4 (2009-06-23)
+------------------
+
+- Bugfix for calendar portlet
+
+- Copyright changed to 'Zope Foundation and Contributors'
+
+
+0.5.3 (2009-05-07)
+------------------
+
+- Do not use z3c.autoinclude
+
+
+0.5.2 (2009-03-12)
+------------------
+
+- Fixed portlet layout
+
+- Use new catalog api
+
+
+0.5.1 (2009-02-03)
+------------------
+
+- Tests fixed
+
+
+0.5.0 (2009-01-20)
+------------------
+
+- Use ICatalogIndexFactory for catalog index creation
+
+- Added unique css class to portlets
+
+
+0.4.0 (2008-12-22)
+------------------
+
+- Use new pagelet api
+
+
+0.3.0 (2008-11-23)
+------------------
+
+- Added buildout for testing against zope3.4
+
+
+0.2.0 (2008-11-20)
+------------------
+
+- Added translations: nl, ru
+
+- Fixed missing dependency
+
+
+0.1.0 (2008-11-18)
+------------------
+
+- Initial release

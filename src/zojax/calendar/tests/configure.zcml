@@ -1,0 +1,18 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser">
+
+  <zojax:pagelet
+     for="*"
+     name="eventsportlet.html"
+     template="eventsportlet.pt"
+     permission="zope.Public" />
+
+  <zojax:pagelet
+     for="*"
+     name="calendarportlet.html"
+     template="calendarportlet.pt"
+     permission="zope.Public" />
+
+</configure>

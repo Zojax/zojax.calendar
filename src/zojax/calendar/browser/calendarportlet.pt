@@ -1,0 +1,54 @@
+<div class="z-portlet portlet-calendar" i18n:domain="zojax.calendar"
+     tal:define="calendar nocall:context/calendar;
+		 siteUrl context/site/@@absolute_url;
+		 year context/year; month context/month;
+		 eventsUrl string:$siteUrl/events.html?year=$year&month=$month">
+  <h2 class="z-portlet-header">
+    <a href="#" rel="nofollow" title="Previous month"
+       tal:condition="context/showPrevMonth"
+       tal:attributes="href string:${request/URL}?pyear=${context/prevMonthYear}&pmonth=${context/prevMonthMonth}"
+       i18n:attributes="title">&laquo;</a>
+
+    <a title="All events" tal:attributes="href eventsUrl" i18n:attributes="title">
+       <tal:block tal:content="string:${context/monthName} $year" />
+    </a>
+    
+    <a href="#" rel="nofollow" title="Next month"
+       tal:condition="context/showNextMonth"
+       tal:attributes="href string:${request/URL}?pyear=${context/nextMonthYear}&pmonth=${context/nextMonthMonth}"
+       i18n:attributes="title">&raquo;</a>
+  </h2>
+
+  <div class="z-portlet-body">
+    <table class="z-calendar" summary="Calendar" i18n:attributes="summary">
+      <thead>
+	<tr class="z-calendar-weekdays">
+          <th scope="col" 
+	      tal:content="weekday" tal:repeat="weekday context/getWeekdays">Su</th>
+	</tr>
+      </thead>
+      <tbody>
+        <tr tal:repeat="week context/getEventsForCalendar">
+          <tal:block repeat="day week">
+            <tal:isday define="daynumber day/day|nothing" condition="daynumber">
+	      <tal:block tal:define="events day/events|nothing">
+		<td class="z-calendar-events" tal:condition="events"
+		    tal:attributes="class python:day['today'] and 
+				    'z-calendar-todayevents' or 'z-calendar-events'">
+		  <a href="#" tal:attributes="title events;
+					      href string:$eventsUrl&day=$daynumber"
+		     tal:content="daynumber">31</a>
+		</td>
+                <td tal:condition="not: events" tal:content="daynumber"
+		    tal:attributes="class python:day['today'] and 
+				    'z-calendar-today' or ''">
+		</td>
+	      </tal:block>
+	    </tal:isday>
+            <td tal:condition="not:day"></td>
+	  </tal:block>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

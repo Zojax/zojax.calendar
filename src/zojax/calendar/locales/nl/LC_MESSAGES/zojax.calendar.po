@@ -1,0 +1,124 @@
+##############################################################################
+#
+# Copyright (c) 2009 Zope Foundation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Fri Nov 21 00:34:06 2008\n"
+"PO-Revision-Date: 2008-11-20 19:57+0100\n"
+"Last-Translator: steve <steve.course@inter.nl.net>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: src/zojax/calendar/browser/calendarportlet.pt:12
+msgid "All events"
+msgstr "Alle gebeurtenissen"
+
+#: src/zojax/calendar/browser/calendarportlet.pt:16
+msgid "Next month"
+msgstr "Volgende maand"
+
+#: src/zojax/calendar/browser/calendarportlet.pt:7
+msgid "Previous month"
+msgstr "Vorige maand"
+
+#: src/zojax/calendar/browser/events.pt:12
+msgid "Date:"
+msgstr "Datum:"
+
+#: src/zojax/calendar/browser/events.pt:2
+msgid "Events"
+msgstr "Gebeurtenissen"
+
+#: src/zojax/calendar/browser/events.pt:23
+msgid "There are no events."
+msgstr "Er zijn geen gebeurtenissen"
+
+#: src/zojax/calendar/browser/eventsportlet.pt:16
+msgid "More..."
+msgstr "Meer..."
+
+#: src/zojax/calendar/configure.zcml:19
+msgid "Information about an upcoming event."
+msgstr "Informatie over een toekomstige gebeurtenis"
+
+#: src/zojax/calendar/configure.zcml:19
+#: src/zojax/calendar/browser/eventsportlet.pt:2
+msgid "Upcoming events"
+msgstr "Toekomistige gebeurtenissen"
+
+#: src/zojax/calendar/configure.zcml:26
+msgid "A portlet displaying a calendar."
+msgstr "Een module met een calendar"
+
+#: src/zojax/calendar/configure.zcml:9
+msgid "Site calendaring system."
+msgstr "Website calendar systeem."
+
+#: src/zojax/calendar/configure.zcml:9
+#: src/zojax/calendar/configure.zcml:26
+#: src/zojax/calendar/browser/calendarportlet.pt:23
+msgid "Calendar"
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:25
+msgid "Event dates are wrong."
+msgstr "Gebeurtenis data zijn foute"
+
+#: src/zojax/calendar/interfaces.py:31
+msgid "Title"
+msgstr "Titel"
+
+#: src/zojax/calendar/interfaces.py:32
+msgid "Event title."
+msgstr "Gebeurtenis titel."
+
+#: src/zojax/calendar/interfaces.py:36
+msgid "Description"
+msgstr "Beschrijving"
+
+#: src/zojax/calendar/interfaces.py:37
+msgid "A short summary of the event."
+msgstr "Een korte samenvatting van de gebeurtenis"
+
+#: src/zojax/calendar/interfaces.py:41
+msgid "Event Starts"
+msgstr "Gebeurtenis start"
+
+#: src/zojax/calendar/interfaces.py:45
+msgid "Event Ends"
+msgstr "Gebeurtenis einde"
+
+#: src/zojax/calendar/interfaces.py:57
+msgid "Event Location"
+msgstr "Gebeurtenis lokatie"
+
+#: src/zojax/calendar/interfaces.py:69
+msgid "Count"
+msgstr "Aantal"
+
+#: src/zojax/calendar/interfaces.py:70
+msgid "Number of events in portlet."
+msgstr "Hoeveel gebeurtinessen in het module"
+
+#: src/zojax/calendar/interfaces.py:79
+msgid "Use session"
+msgstr "Gebruik sessie"
+
+#: src/zojax/calendar/interfaces.py:80
+msgid "Use session to store current year and month for portlet."
+msgstr "Gebruik web sessie om huidige jaar en maand voor module te bewaren"
+

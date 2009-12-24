@@ -1,0 +1,20 @@
+<div class="z-portlet portlet-events" i18n:domain="zojax.calendar">
+  <h2 class="z-portlet-header" i18n:translate="">Upcoming events</h2>
+  <div class="z-portlet-body">
+    <div tal:repeat="item context/events"
+         tal:attributes="class python:repeat['item'].odd() and 'z-portlet-item odd' or 'z-portlet-item even'">
+      <a tal:attributes="href string:${item/@@absolute_url}/;
+			 title item/description" tal:content="item/title"></a>
+      <span class="z-portlet-item-details">
+	<tal:condition condition="item/location|nothing">
+	  <tal:location content="item/location">Location</tal:location>, <br />
+        </tal:condition>
+	<tal:date tal:content="structure formatter:dateTime,short:item/startDate" />
+      </span>
+    </div>
+    <div class="z-portlet-footer" tal:condition="nothing">
+      <a tal:attributes="href context/source/@@absolute_url"
+	 i18n:translate="">More...</a>
+    </div>
+  </div>
+</div>

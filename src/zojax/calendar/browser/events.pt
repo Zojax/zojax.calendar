@@ -1,0 +1,27 @@
+<tal:block i18n:domain="zojax.calendar">
+  <h1 i18n:translate="">Events</h1>
+  <br />
+
+  <tal:block condition="view/events">
+    <tal:block tal:content="structure view/events/@@pagelet" />
+
+    <div class="x-listing" tal:repeat="item view/events">
+      <h2><a tal:content="item/title" 
+	     tal:attributes="href string:${item/@@absolute_url}/"></a></h2>
+      <div style="padding-bottom: 0.5em">
+	<span class="discreet" i18n:translate="">Date:</span>
+	<tal:block content="structure formatter:dateTime,medium:item/startDate" /> -
+	<tal:block content="structure formatter:dateTime,medium:item/endDate" />
+      </div>
+      <div class="description" tal:content="item/description"></div>
+      <br /><br />
+    </div>
+  </tal:block>
+
+  <tal:block tal:condition="not:view/events">
+    <br />
+    <p i18n:translate="">
+      There are no events.
+    </p>
+  </tal:block>
+</tal:block>
