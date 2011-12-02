@@ -1,0 +1,49 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax.calendar">
+
+  <zojax:reservedNames
+     names="calendar"
+     for="zojax.content.space.interfaces.ISpace" />
+
+  <!-- calendar workspace -->
+  <zojax:content
+     name="workspace.calendar"
+     title="Calendar Workspace"
+     class=".workspace.CalendarWorkspace"
+     schema=".interfaces.ICalendarWorkspace"
+     contains="contenttype.event"
+     type="zojax.content.type.interfaces.IInactiveType
+	       zojax.content.space.interfaces.ISpaceContentType"
+     containers="zojax.content.space.interfaces.IContentSpaceType"
+     permission="zojax.ModifyContent" />
+
+  <class class=".workspace.CalendarWorkspace">
+    <implements interface="zojax.activity.interfaces.IActivityAware" />
+    <implements interface="zojax.catalog.interfaces.ISearchContext" />
+    <implements interface="zojax.extensions.interfaces.IExtensible" />
+    <implements interface="zojax.content.type.interfaces.IRenameNotAllowed" />
+    <implements interface="zojax.content.type.interfaces.ISearchableContent" />
+    <implements interface="zojax.content.type.interfaces.IUnremoveableContent" />
+    <implements interface="zojax.content.type.interfaces.IContainerContentsAware" />
+
+    <require
+       permission="zope.View"
+       interface=".interfaces.ICalendarWorkspace
+		  zope.app.container.interfaces.IReadContainer" />
+
+    <require
+       permission="zojax.ModifyContent"
+       set_schema=".interfaces.ICalendarWorkspace"
+       interface="zope.app.container.interfaces.IWriteContainer" />
+
+  </class>
+
+  <!-- calendar workspace factory -->
+  <adapter
+     name="calendar"
+     factory=".workspace.CalendarWorkspaceFactory" />
+
+</configure>

@@ -17,6 +17,7 @@ $Id$
 """
 from zope import schema, interface
 from zope.i18nmessageid import MessageFactory
+from zojax.content.space.interfaces import IWorkspace, IWorkspaceFactory
 
 _ = MessageFactory('zojax.calendar')
 
@@ -111,3 +112,14 @@ class ICalendar(interface.Interface):
 
 class ICalendarProduct(ICalendar):
     """ Calendar product """
+
+
+
+class ICalendarWorkspace(ICalendar, IWorkspace):
+    """ calendar workspace """
+
+    title = interface.Attribute('Title')
+    description = interface.Attribute('Description')
+
+class ICalendarWorkspaceFactory(IWorkspaceFactory):
+    """ calendar workspace factory """

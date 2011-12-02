@@ -60,4 +60,7 @@
   <!-- translations -->
   <i18n:registerTranslations directory="locales"/>
 
+  <!-- workspace declaration -->
+  <include file="workspace.zcml" />
+
 </configure>
