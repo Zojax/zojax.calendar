@@ -1,0 +1,56 @@
+<div class="z-contenttypes-eventDetails" i18n:domain="zojax.contenttypes">
+  <table summary="Event details" i18n:attributes="summary">
+    <tbody>
+      <tr>
+        <th i18n:translate="">When</th>
+        <td>
+          <tal:block content="structure formatter:dateTime,medium:context/startDate" />
+          <span i18n:translate="">to</span> <br />
+          <tal:block content="structure formatter:dateTime,medium:context/endDate" />
+	</td>
+      </tr>
+      <tr tal:condition="context/location">
+        <th i18n:translate="">Where</th>
+        <td tal:content="context/location">Oslo, Norway</td>
+      </tr>
+      <tr tal:condition="context/contactName">
+        <th i18n:translate="">Contact Name</th>
+        <td tal:content="context/contactName">John Smith</td>
+      </tr>
+      <tr tal:define="contact_email context/contactEmail" 
+	  tal:condition="contact_email">
+        <th i18n:translate="">Contact E-mail</th>
+        <td>
+          <a tal:attributes="href string:emailto:$contact_email"
+	     tal:content="contact_email"></a>
+        </td>
+      </tr>
+      <tr tal:condition="context/contactPhone">
+        <th i18n:translate="">Contact Phone</th>
+        <td tal:content="context/contactPhone">555-GET-PLONE</td>
+      </tr>
+      <tr tal:condition="context/attendees">
+	<th i18n:translate="">Attendees</th>
+        <td tal:content="python: ', '.join(context.attendees)">Person 1, Person 2</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<tal:block i18n:domain="zojax.contenttypes" tal:define="text context/text">
+  <p tal:condition="not:text" class="discreet" i18n:translate="">
+    This item does not have any body text, click the edit tab to change it.
+  </p>
+
+  <div tal:condition="text" tal:content="structure text/cooked">
+    Body Text
+  </div>
+</tal:block>
+
+<p tal:condition="context/event_url|nothing" i18n:domain="">
+  <a href="event_url"
+     tal:attributes="href context/event_url"  i18n:translate="">
+    More information about this event&hellip;</a>
+</p>
+
+<div class="visualClear"></div>

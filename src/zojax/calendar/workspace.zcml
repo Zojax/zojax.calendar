@@ -14,7 +14,7 @@
      title="Calendar Workspace"
      class=".workspace.CalendarWorkspace"
      schema=".interfaces.ICalendarWorkspace"
-     contains="contenttype.event"
+     contains="calendar.event"
      type="zojax.content.type.interfaces.IInactiveType
 	       zojax.content.space.interfaces.ISpaceContentType"
      containers="zojax.content.space.interfaces.IContentSpaceType"

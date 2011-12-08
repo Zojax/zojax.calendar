@@ -19,6 +19,11 @@ from zope import schema, interface
 from zope.i18nmessageid import MessageFactory
 from zojax.content.space.interfaces import IWorkspace, IWorkspaceFactory
 
+from z3c.schema.baseurl import BaseURL
+from z3c.schema.email import RFC822MailAddress
+from zojax.widget.list import SimpleList
+from zojax.richtext.field import RichText
+
 _ = MessageFactory('zojax.calendar')
 
 
@@ -109,10 +114,8 @@ class ICalendar(interface.Interface):
         """ list of events """
 
 
-
 class ICalendarProduct(ICalendar):
     """ Calendar product """
-
 
 
 class ICalendarWorkspace(ICalendar, IWorkspace):
@@ -121,5 +124,39 @@ class ICalendarWorkspace(ICalendar, IWorkspace):
     title = interface.Attribute('Title')
     description = interface.Attribute('Description')
 
+
 class ICalendarWorkspaceFactory(IWorkspaceFactory):
     """ calendar workspace factory """
+
+
+class ICalendarEvent(IEvent, IEventLocation):
+    """ calendar event """
+
+    attendees = SimpleList(
+        title = _(u'Attendees'),
+        value_type = schema.TextLine(),
+        required = False)
+
+    eventUrl = BaseURL(
+        title = _(u'Event URL'),
+        description = _(u'Web address with more info about the event.'),
+        required = False)
+
+    contactName = schema.TextLine(
+        title = _(u'Contact Name'),
+        required = False)
+
+    contactEmail = RFC822MailAddress(
+        title = _(u'Contact E-mail'),
+        required = False)
+
+    contactPhone = schema.TextLine(
+        title = _(u'Contact Phone'),
+        required = False)
+
+    text = RichText(
+        title = _(u'Body'),
+        description = _(u'Event body text.'),
+        required = False)
+
+    cooked_text = interface.Attribute('Cooked text')

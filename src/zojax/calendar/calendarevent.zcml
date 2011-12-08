@@ -1,0 +1,83 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax.contenttypes">
+
+  <permission
+     id="zojax.contenttype.AddCalendarEvent"
+     title="Add calendar event"
+     description="Allow add new event to calendar." />
+
+  <permission
+     id="zojax.contenttype.SubmitCalendarEvent"
+     title="Submit calendar event"
+     description="Allow submit event to calendar." />
+
+  <registerIn registry="zojax.product.zojax-calendar">
+    <zojax:content
+       title="Calendar Event"
+       name="calendar.event"
+       class=".event.CalendarEvent"
+       schema=".interfaces.ICalendarEvent"
+       containers="workspace.calendar"
+       contenttype=".interfaces.IEventType"
+       type=".interfaces.IEventType
+	     zojax.content.type.interfaces.IActivePortalType
+	     zojax.content.space.interfaces.IContentSpaceType"
+       description="Information about an upcoming event, which can be displayed in the calendar."
+       permission="zojax.contenttype.AddCalendarEvent" />
+
+    <class class=".event.CalendarEvent">
+      <implements interface="zojax.ownership.interfaces.IOwnerAware" />
+      <implements interface="zojax.content.type.interfaces.IShareableContent" />
+      <implements interface="zojax.content.type.interfaces.ISearchableContent" />
+      <implements interface="zojax.content.type.interfaces.ITitleBasedName" />
+
+      <require
+	 permission="zope.View"
+	 interface=".interfaces.ICalendarEvent" />
+
+      <require
+	 permission="zojax.ModifyContent"
+	 set_schema=".interfaces.ICalendarEvent" />
+    </class>
+
+    <browser:icon
+       name="zmi_icon"
+       for=".interfaces.ICalendarEvent"
+       file="event_icon.png" />
+
+    <browser:icon
+       name="zmi_icon"
+       for=".interfaces.IEventType"
+       file="event_icon.png" />
+
+    <zojax:pagelet
+       name="index.html"
+       for=".interfaces.ICalendarEvent"
+       template="browser/calendarevent.pt"
+       provides="zojax.content.type.interfaces.IContentView"
+       permission="zope.View" />
+
+    <!-- permissions -->
+    <zojax:permission
+       permission="zojax.contenttype.AddCalendarEvent"
+       category="zojax.content.permissions.interfaces.IAddPermission" />
+
+    <zojax:contentpermission
+       for="zojax.content.space.interfaces.IContentSpace"
+       contenttype="calendar.event"
+       permission="zojax.contenttype.AddCalendarEvent"
+       managepermission="zojax.ManageContentPermission"
+       class="zojax.content.permissions.content.ContentPermission"
+       category="zojax.content.permissions.interfaces.IAddPermission" />
+
+    <!-- draft support -->
+    <zojax:draft
+       content="calendar.event"
+       publish="zojax.contenttype.AddCalendarEvent" />
+
+  </registerIn>
+
+</configure>

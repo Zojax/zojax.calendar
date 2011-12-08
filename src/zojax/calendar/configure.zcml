@@ -63,4 +63,7 @@
   <!-- workspace declaration -->
   <include file="workspace.zcml" />
 
+  <!-- calendar event declaration -->
+  <include file="calendarevent.zcml" />
+
 </configure>
