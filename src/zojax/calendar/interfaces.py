@@ -23,6 +23,7 @@ from z3c.schema.baseurl import BaseURL
 from z3c.schema.email import RFC822MailAddress
 from zojax.widget.list import SimpleList
 from zojax.richtext.field import RichText
+from zojax.principal.field import UserField
 
 _ = MessageFactory('zojax.calendar')
 
@@ -132,10 +133,11 @@ class ICalendarWorkspaceFactory(IWorkspaceFactory):
 class ICalendarEvent(IEvent, IEventLocation):
     """ calendar event """
 
-    attendees = SimpleList(
-        title = _(u'Attendees'),
-        value_type = schema.TextLine(),
-        required = False)
+    attendees =  schema.Tuple(
+        title = u'Attendees',
+        value_type = UserField(),
+        required = False,
+        default = ())
 
     eventUrl = BaseURL(
         title = _(u'Event URL'),
