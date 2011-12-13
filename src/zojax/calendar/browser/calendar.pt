@@ -1,0 +1,14 @@
+<tal:block i18n:domain="zojax.calendar" tal:define="hasEvents view/hasEvents">
+  <h1 i18n:translate="">Calendar</h1>
+
+  <div tal:condition="not:hasEvents" i18n:translate="">
+    No events have been created.
+  </div>
+
+  <div tal:condition="hasEvents">
+    <tal:block repeat="event view/events">
+      <a href="#" tal:attributes="href event/@@absolute_url" tal:content="event/title"></a> <br />
+    </tal:block>
+  </div>
+
+</tal:block>

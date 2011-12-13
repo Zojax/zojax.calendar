@@ -23,4 +23,16 @@
      template="events.pt"
      class=".events.Events" />
 
+  <!-- calendar workspace -->
+  <browser:defaultView
+     name="index.html"
+     for="..interfaces.ICalendarWorkspace" />
+
+  <zojax:pagelet
+     name="index.html"
+     for="..interfaces.ICalendarWorkspace"
+     template="calendar.pt"
+     class=".calendar.ClendarView"
+     permission="zope.View" />
+
 </configure>
