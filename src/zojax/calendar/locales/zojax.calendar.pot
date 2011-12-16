@@ -1,0 +1,142 @@
+##############################################################################
+#
+# Copyright (c) 2003-2004 Zope Corporation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Thu Dec  8 22:31:15 2011\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: src/zojax/calendar/browser/calendarportlet.pt:12
+msgid "All events"
+msgstr ""
+
+#: src/zojax/calendar/browser/calendarportlet.pt:16
+msgid "Next month"
+msgstr ""
+
+#: src/zojax/calendar/browser/calendarportlet.pt:7
+msgid "Previous month"
+msgstr ""
+
+#: src/zojax/calendar/browser/events.pt:12
+msgid "Date:"
+msgstr ""
+
+#: src/zojax/calendar/browser/events.pt:2
+msgid "Events"
+msgstr ""
+
+#: src/zojax/calendar/browser/events.pt:23
+msgid "There are no events."
+msgstr ""
+
+#: src/zojax/calendar/browser/eventsportlet.pt:16
+msgid "More..."
+msgstr ""
+
+#: src/zojax/calendar/configure.zcml:21
+msgid "Information about an upcoming event."
+msgstr ""
+
+#: src/zojax/calendar/configure.zcml:21
+#: src/zojax/calendar/browser/eventsportlet.pt:2
+msgid "Upcoming events"
+msgstr ""
+
+#: src/zojax/calendar/configure.zcml:28
+msgid "A portlet displaying a calendar."
+msgstr ""
+
+#: src/zojax/calendar/configure.zcml:7
+msgid "Site calendaring system."
+msgstr ""
+
+#: src/zojax/calendar/configure.zcml:7
+#: src/zojax/calendar/configure.zcml:28
+#: src/zojax/calendar/browser/calendarportlet.pt:23
+msgid "Calendar"
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:25
+msgid "Event dates are wrong."
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:31
+msgid "Title"
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:32
+msgid "Event title."
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:36
+msgid "Description"
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:37
+msgid "A short summary of the event."
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:41
+msgid "Event Starts"
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:45
+msgid "Event Ends"
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:59
+msgid "Event Location"
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:71
+msgid "Label"
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:72
+msgid "Custom label for events portlet."
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:76
+msgid "Count"
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:77
+msgid "Number of events in portlet."
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:82
+#: src/zojax/calendar/interfaces.py:98
+msgid "Visibility"
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:83
+#: src/zojax/calendar/interfaces.py:99
+msgid "All events are visible to all users."
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:92
+msgid "Use session"
+msgstr ""
+
+#: src/zojax/calendar/interfaces.py:93
+msgid "Use session to store current year and month for portlet."
+msgstr ""
+
