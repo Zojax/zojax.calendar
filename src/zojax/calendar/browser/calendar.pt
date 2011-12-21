@@ -6,6 +6,26 @@
   </div>
 
   <div tal:condition="hasEvents">
+
+
+    <script type="text/javascript">
+$(document).ready(function() {
+
+$.ajax({
+    type: "POST",
+    url: "http://localhost:8080/++skin++JSONRPC.authentication/QuickIntranet",
+    data: "{'method':'listCalendar', 'params': {'showdate': '07/10/01 10:00', 'viewtype': 'month'}}",
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function(msg) {
+      console.log(msg);
+    }
+  });
+
+});
+    </script>
+
+
     <tal:block repeat="event view/events">
       <a href="#" tal:attributes="href event/@@absolute_url" tal:content="event/title"></a> <br />
     </tal:block>

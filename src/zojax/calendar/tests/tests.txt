@@ -64,16 +64,18 @@ we need install calendar product
     <!DOCTYPE html...
     ...
     ...<div class="z-portlet portlet-events">
-         <h2 class="z-portlet-header">Upcoming events</h2>
-         <div class="z-portlet-body">
-           <div class="z-portlet-item even">
-             <a href="http://localhost/space/event/" title="">Test news item</a>
-             <span class="z-portlet-item-details">
-                Kazakhstan, Almaty,<br />
-                01/01/07 10:00 AM
-             </span>
-           </div>
-         </div>
+      <h2 class="z-portlet-header">Upcoming events</h2>
+      <div class="z-portlet-body">
+        <div class="z-portlet-item even">
+          <a href="http://localhost/space/event/" title="">Test news item</a>
+          <span class="z-portlet-item-details">
+    		  Kazakhstan, Almaty, <br />
+    <BLANKLINE>
+    	<span class="zojax-formatter-datetime" value="January 01, 2007 10:00:00 -0800" format="short" offset="-480">01/01/07 10:00 AM</span>
+          </span>
+        </div>
+    <BLANKLINE>
+      </div>
     ...
     </html>
 
@@ -118,6 +120,21 @@ Calendar portlet
     </td>
     ...
     </html>
+
+
+JSONRPC
+-------
+
+  >>> from datetime import datetime
+  >>> now = datetime.now().strftime('%Y/%m/%d %H:%M')
+
+  >>> from z3c.jsonrpc.testing import JSONRPCTestProxy
+  >>> siteURL = 'http://localhost/++skin++JSONRPC.datafeed'
+  >>> b = Browser()
+  >>> b.handleErrors = False
+  >>> b.post(siteURL, "{'method':'listCalendar', 'params': {'showdate': '07/10/01 10:00', 'viewtype': 'month'}}", content_type='application/json')
+  >>> b.contents
+  '{"jsonrpc":"2.0","result":{"viewtype":"month","showdate":"07/10/01 10:00"},"id":"jsonrpc"}'
 
 
 Uninstall product

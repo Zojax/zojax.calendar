@@ -15,16 +15,12 @@
 
 $Id$
 """
-import unittest, os.path
-from utils import setUp, ZCMLLayer, FunctionalDocFileSuite
 
-calendarLayer = ZCMLLayer(
-    os.path.join(os.path.split(__file__)[0], 'ftesting.zcml'),
-    __name__, 'calendarLayer', allow_teardown=True)
+from z3c.jsonrpc import publisher
 
 
-def test_suite():
-    return unittest.TestSuite((
-            FunctionalDocFileSuite(
-                'tests.txt', setUp=setUp, layer=calendarLayer),
-            ))
+class Datafeed(publisher.MethodPublisher):
+
+    def listCalendar(self, showdate=None, viewtype=None):
+        """ """
+        return dict(showdate=showdate, viewtype=viewtype)

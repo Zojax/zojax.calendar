@@ -14,6 +14,7 @@
 
 """
 import os.path, shutil, tempfile
+from pkg_resources import get_distribution
 
 import transaction
 from ZODB.DB import DB
@@ -39,42 +40,46 @@ def setUp(test):
     root['intids'].register(root)
     root.getSiteManager().registerUtility(root['intids'], IIntIds)
 
+if get_distribution('ZODB3').version.startswith('3.8'):
+    class FunctionalTestSetup(zope.app.testing.functional.FunctionalTestSetup):
 
-class FunctionalTestSetup(zope.app.testing.functional.FunctionalTestSetup):
+        temp_dir_name = None
 
-    temp_dir_name = None
-
-    def setUp(self):
-        """Prepares for a functional test case."""
-        # Tear down the old demo storage (if any) and create a fresh one
-        transaction.abort()
-        self.db.close()
-        storage = DemoStorage("Demo Storage", self.base_storage)
-        # make a dir
-        temp_dir_name = self.temp_dir_name = tempfile.mkdtemp()
-        # wrap storage with BlobStorage
-        storage = BlobStorage(temp_dir_name, storage)
-        self.db = self.app.db = DB(storage)
-        self.connection = None
-
-    def tearDown(self):
-        """Cleans up after a functional test case."""
-        transaction.abort()
-        if self.connection:
-            self.connection.close()
+        def setUp(self):
+            """Prepares for a functional test case."""
+            # Tear down the old demo storage (if any) and create a fresh one
+            transaction.abort()
+            self.db.close()
+            storage = DemoStorage("Demo Storage", self.base_storage)
+            # make a dir
+            temp_dir_name = self.temp_dir_name = tempfile.mkdtemp()
+            # wrap storage with BlobStorage
+            storage = BlobStorage(temp_dir_name, storage)
+            self.db = self.app.db = DB(storage)
             self.connection = None
-        self.db.close()
-        # del dir named '__blob_test__%s' % self.name
-        if self.temp_dir_name is not None:
-            shutil.rmtree(self.temp_dir_name, True)
-            self.temp_dir_name = None
-        setSite(None)
+
+        def tearDown(self):
+            """Cleans up after a functional test case."""
+            transaction.abort()
+            if self.connection:
+                self.connection.close()
+                self.connection = None
+            self.db.close()
+            # del dir named '__blob_test__%s' % self.name
+            if self.temp_dir_name is not None:
+                shutil.rmtree(self.temp_dir_name, True)
+                self.temp_dir_name = None
+            setSite(None)
 
 
-class ZCMLLayer(zope.app.testing.functional.ZCMLLayer):
+    class ZCMLLayer(zope.app.testing.functional.ZCMLLayer):
 
-    def setUp(self):
-        self.setup = FunctionalTestSetup(self.config_file)
+        def setUp(self):
+            self.setup = FunctionalTestSetup(self.config_file)
+
+else:
+    ZCMLLayer = zope.app.testing.functional.ZCMLLayer
+    FunctionalTestSetup = zope.app.testing.functional.FunctionalTestSetup
 
 
 def FunctionalDocFileSuite(*paths, **kw):

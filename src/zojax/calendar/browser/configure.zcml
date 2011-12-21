@@ -35,4 +35,7 @@
      class=".calendar.ClendarView"
      permission="zope.View" />
 
+  <!-- jsonrpc -->
+  <include file="jsonrpc.zcml" />
+
 </configure>

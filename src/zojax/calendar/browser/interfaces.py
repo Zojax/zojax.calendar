@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2009 Zope Foundation and Contributors.
+# Copyright (c) 2008 Zope Foundation and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -11,20 +11,17 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+
 """
 
 $Id$
 """
-import unittest, os.path
-from utils import setUp, ZCMLLayer, FunctionalDocFileSuite
 
-calendarLayer = ZCMLLayer(
-    os.path.join(os.path.split(__file__)[0], 'ftesting.zcml'),
-    __name__, 'calendarLayer', allow_teardown=True)
+from z3c.jsonrpc.layer import IJSONRPCLayer
+from zojax.skintool.interfaces import INoSkinSwitching
 
+from zojax.calendar.interfaces import _
 
-def test_suite():
-    return unittest.TestSuite((
-            FunctionalDocFileSuite(
-                'tests.txt', setUp=setUp, layer=calendarLayer),
-            ))
+class IJSONRPCLayer(IJSONRPCLayer, INoSkinSwitching):
+    """ jsonrpc layer """
+
