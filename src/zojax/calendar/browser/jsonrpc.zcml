@@ -6,7 +6,7 @@
   <interface
       interface=".interfaces.IJSONRPCLayer"
       type="z3c.jsonrpc.interfaces.IJSONRPCSkinType"
-      name="JSONRPC.datafeed" />
+      name="JSONRPC.calendar" />
 
     <z3c:jsonrpc
         for="*"

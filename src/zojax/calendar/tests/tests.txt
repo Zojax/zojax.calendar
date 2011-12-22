@@ -129,7 +129,7 @@ JSONRPC
   >>> now = datetime.now().strftime('%Y/%m/%d %H:%M')
 
   >>> from z3c.jsonrpc.testing import JSONRPCTestProxy
-  >>> siteURL = 'http://localhost/++skin++JSONRPC.datafeed'
+  >>> siteURL = 'http://localhost/++skin++JSONRPC.calendar'
   >>> b = Browser()
   >>> b.handleErrors = False
   >>> b.post(siteURL, "{'method':'listCalendar', 'params': {'showdate': '07/10/01 10:00', 'viewtype': 'month'}}", content_type='application/json')
