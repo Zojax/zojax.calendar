@@ -18,6 +18,7 @@ $Id$
 from zope.component import getUtility
 
 from zojax.catalog.interfaces import ICatalog
+from zojax.resourcepackage.library import include
 
 
 class ClendarView(object):
@@ -25,6 +26,8 @@ class ClendarView(object):
     hasEvents = True
 
     def update(self):
+        include('jquery-wdcalendar')
+
         context = self.context
         request = self.request
 
