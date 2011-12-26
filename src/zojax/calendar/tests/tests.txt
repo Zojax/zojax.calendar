@@ -166,8 +166,24 @@ add calendar event
 
 jsapi
 
-    >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=month&showdate=2011/12/24")
+response for day
+
+    >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=day&showdate=12/24/2011")
     >>> print actor.contents
+    {"start":"12/24/2011 00:00", "issort":true, "end":"12/24/2011 23:23", "events":[["sandwich-day","Sandwich Day","12/24/2011 10:00","12/24/2011 18:00","0","0","0","6","1","Russia, Yeysk",""]], "error":null}
+
+response for week
+
+    >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=week&showdate=12/24/2011")
+    >>> print actor.contents
+    {"start":"12/19/2011 00:00", "issort":true, "end":"12/25/2011 23:23", "events":[["sandwich-day","Sandwich Day","12/24/2011 10:00","12/24/2011 18:00","0","0","0","6","1","Russia, Yeysk",""]], "error":null}
+
+response for month
+
+    >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=month&showdate=12/24/2011")
+    >>> print actor.contents
+    {"start":"12/01/2011 00:00", "issort":true, "end":"12/31/2011 23:23", "events":[["sandwich-day","Sandwich Day","12/24/2011 10:00","12/24/2011 18:00","0","0","0","6","1","Russia, Yeysk",""]], "error":null}
+
 
 
 Uninstall product
