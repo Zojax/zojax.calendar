@@ -16,36 +16,7 @@
     // <![CDATA[
         $(document).ready(function() {
 
-
-                 $.ajax({
-                    type: "POST", //
-                    url: "http://localhost:8080/QuickIntranet/test-calendar/calendar/CalendarAPI/list",
-                    data: undefined,
-			        //dataType: "text",  // fixed jquery 1.4 not support Ms Date Json Format /Date(@Tickets)/
-                    dataType: "json",
-                    dataFilter: function(data, type) {
-                        //return data.replace(/"\\\/(Date\([0-9-]+\))\\\/"/gi, "new $1");
-
-                        return data;
-                      },
-                    success: function(data) {
-      console.log(data);
-                    },
-                    error: function(data) {
-      console.log(data);
-                    }
-                });
-
-
-
-
-
-
-
-
-
-           var view="week";
-
+            var view="week";
             var DATA_FEED_URL = CalendarAPI_URL;
             var op = {
                 view: view,
@@ -119,8 +90,6 @@
             }
             function cal_onerror(type,data)
             {
-//console.log(type);
-//console.log(data);
                 $("#errorpannel").show();
             }
             function Edit(data)
@@ -212,8 +181,6 @@
                 if (p && p.datestrshow) {
                     $("#txtdatetimeshow").text(p.datestrshow);
                 }
-
-
             });
             //previous date range
             $("#sfprevbtn").click(function(e) {
