@@ -10,26 +10,43 @@
 
 
     <script type="text/javascript">
-// <![CDATA[
-
-$(document).ready(function() {
-//url: '<tal:block content="string: ${context/@@absolute_url}/++skin++JSONRPC.calendar" />',
-$.ajax({
-    type: "POST",
-    url: "http://localhost:8080/++skin++JSONRPC.authentication/QuickIntranet",
-    data: "{'method':'listCalendar', 'params': {'showdate': '07/10/01 10:00', 'viewtype': 'month'}}",
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    success: function(msg) {
-      console.log(msg);
-    }
-  });
+        var CalendarAPI_URL = '<tal:block content="string: ${context/@@absolute_url}/CalendarAPI/" />';
+    </script>
+    <script type="text/javascript">
+    // <![CDATA[
+        $(document).ready(function() {
 
 
+                 $.ajax({
+                    type: "POST", //
+                    url: "http://localhost:8080/QuickIntranet/test-calendar/calendar/CalendarAPI/list",
+                    data: undefined,
+			        //dataType: "text",  // fixed jquery 1.4 not support Ms Date Json Format /Date(@Tickets)/
+                    dataType: "json",
+                    dataFilter: function(data, type) {
+                        //return data.replace(/"\\\/(Date\([0-9-]+\))\\\/"/gi, "new $1");
 
-          var view="week";
+                        return data;
+                      },
+                    success: function(data) {
+      console.log(data);
+                    },
+                    error: function(data) {
+      console.log(data);
+                    }
+                });
 
-            var DATA_FEED_URL = "php/datafeed.php";
+
+
+
+
+
+
+
+
+           var view="week";
+
+            var DATA_FEED_URL = CalendarAPI_URL;
             var op = {
                 view: view,
                 theme:3,
@@ -42,10 +59,10 @@ $.ajax({
                 onAfterRequestData: cal_afterrequest,
                 onRequestDataError: cal_onerror,
                 autoload:true,
-                url: DATA_FEED_URL + "?method=list",
-                quickAddUrl: DATA_FEED_URL + "?method=add",
-                quickUpdateUrl: DATA_FEED_URL + "?method=update",
-                quickDeleteUrl: DATA_FEED_URL + "?method=remove"
+                url: DATA_FEED_URL + "list",
+                quickAddUrl: DATA_FEED_URL + "add",
+                quickUpdateUrl: DATA_FEED_URL + "update",
+                quickDeleteUrl: DATA_FEED_URL + "remove"
             };
             var $dv = $("#calhead");
             var _MH = document.documentElement.clientHeight;
@@ -102,6 +119,8 @@ $.ajax({
             }
             function cal_onerror(type,data)
             {
+//console.log(type);
+//console.log(data);
                 $("#errorpannel").show();
             }
             function Edit(data)
@@ -212,8 +231,8 @@ $.ajax({
                 }
             });
 
-});
-// ]]>
+        });
+    // ]]>
     </script>
 
     <div>
