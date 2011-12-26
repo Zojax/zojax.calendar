@@ -19,7 +19,7 @@ $Id$
 from zojax.calendar.product import calendar as calendarModule
 
 from pytz import utc
-from datetime import datetime
+from datetime import datetime, timedelta
 from simplejson import JSONEncoder
 
 from zope import interface
@@ -40,7 +40,7 @@ encoder = JSONEncoder()
 def jsonable(func):
 
     def cal(self):
-        self.request.response.setHeader('Content-Type', ' application/javascript')
+        self.request.response.setHeader('Content-Type', ' application/json;charset=UTF-8')
         return unicode(func(self)).encode('utf-8')
     return cal
 
@@ -72,17 +72,18 @@ class listCalendar(object):
         request = self.request
         context = self.context
 
-        showdate = request.form.get('showdate', datetime.now().strftime('%Y/%m/%d %H:%M'))
+        showdate = request.form.get('showdate', datetime.now().strftime('%m/%d/%Y %H:%M'))
         viewtype = request.form.get('viewtype', 'month')
 
         # convert str date to datetime:
         try:
-            showdate = datetime.strptime(showdate, '%Y/%m/%d %H:%M')
+            showdate = datetime.strptime(showdate, '%m/%d/%Y %H:%M')
         except ValueError:
             try:
-                showdate = datetime.strptime(showdate, '%Y/%m/%d')
+                showdate = datetime.strptime(showdate, '%m/%d/%Y')
             except ValueError:
-                return
+                # TODO: need return error
+                return """{"showdate": %s}"""%showdate
 
         if viewtype == 'month':
             lastDay = calendarModule.monthrange(showdate.year, showdate.month)[1]
@@ -92,7 +93,7 @@ class listCalendar(object):
         if viewtype == 'week':
             firstWeekDay = showdate.day - calendarModule.weekday(showdate.year, showdate.month, showdate.day)
             first_date = datetime(showdate.year, showdate.month, firstWeekDay, 0, 0, 0, 0, utc)
-            last_date = datetime(showdate.year, showdate.month, firstWeekDay+6, 23, 23, 59, 0, utc)
+            last_date = datetime(showdate.year, showdate.month, firstWeekDay, 23, 23, 59, 0, utc) + timedelta(days=6)
 
         if viewtype == 'day':
             first_date = datetime(showdate.year, showdate.month, showdate.day, 0, 0, 0, 0, utc)
@@ -105,11 +106,11 @@ class listCalendar(object):
         catalog = getUtility(ICatalog)
 
         ret = {}
-        ret['events'] = []
-        ret["issort"] = True #true
+        ret['events'] = ""
+        ret["issort"] = 'true'
         ret["start"] = first_date
         ret["end"] = last_date
-        ret['error'] = None #null
+        ret['error'] = 'null'
 
         # select events from calendar within range:
         results = catalog.searchResults(
@@ -118,23 +119,25 @@ class listCalendar(object):
             calendarEventDuration = {
                 'between': (first_date, last_date, True, True)})
 
+        events = ""
         for i in results:
-            ret['events'].append([
+            events = events + """["%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s"],"""%(
                 i.__name__,
                 i.title,
-                i.startDate.strftime('%Y/%m/%d %H:%M'),
-                i.endDate.strftime('%Y/%m/%d %H:%M'),
+                i.startDate.strftime('%m/%d/%Y %H:%M'),
+                i.endDate.strftime('%m/%d/%Y %H:%M'),
                 0, #IsAllDayEvent,
                 0, #more than one day event
                    #$row->InstanceType,
                 0, #Recurring event,
-                '#ccc', #$row->Color,
+                '6', #$row->Color,
                 1, #editable
-                i.location,
+                i.location or 'null',
                 '' #$attends
-                ])
+                )
+        ret['events'] = "[%s]"%events[:-1]
 
-        return """{"events":[],"issort":true,"start":"01\/01\/1970 01:00","end":"01\/01\/1970 01:00","error":null}"""
-        #return "{'start': '2011\/12\/01 00:00', 'issort': true, 'end': '2011\/12\/31 23:23', 'events': [[u'sandwich-day', u'Sandwich Day', '2011\/12\/24 10:00', '2011\/12\/24 18:00', 0, 0, 0, '#ccc', 1, u'Russia, Yeysk', '']], 'error': null}"
-        #return "{'start': %s, 'issort': true, 'end': %s, 'events': %s, 'error': null}"%(ret["start"].strftime('%Y/%m/%d %H:%M'), ret["end"].strftime('%Y/%m/%d %H:%M'), ret['events'])
-        #return ret
+        return """{"start":"%s", "issort":true, "end":"%s", "events":%s, "error":null}"""%(
+            ret["start"].strftime('%m/%d/%Y %H:%M'),
+            ret["end"].strftime('%m/%d/%Y %H:%M'),
+            ret['events'])
