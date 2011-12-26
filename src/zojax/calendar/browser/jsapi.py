@@ -65,6 +65,19 @@ class CalendarAPI(BrowserView):
         raise NotFound(self, name, request)
 
 
+class addCalendar(object):
+
+    @jsonable
+    def __call__(self):
+        request = self.request
+        context = self.context
+
+        calendarStartTime = request.form.get('CalendarStartTime', None)
+        calendarEndTime = request.form.get('CalendarEndTime', None)
+        calendarTitle = request.form.get('CalendarTitle', None)
+        isAllDayEvent = request.form.get('IsAllDayEvent', None)
+
+
 class listCalendar(object):
 
     @jsonable
@@ -126,14 +139,14 @@ class listCalendar(object):
                 i.title,
                 i.startDate.strftime('%m/%d/%Y %H:%M'),
                 i.endDate.strftime('%m/%d/%Y %H:%M'),
-                0, #IsAllDayEvent,
+                i.isAllDayEvent or 'null',
                 0, #more than one day event
-                   #$row->InstanceType,
-                0, #Recurring event,
-                '6', #$row->Color,
+                   #InstanceType,
+                i.recurringRule,
+                i.color,
                 1, #editable
                 i.location or 'null',
-                '' #$attends
+                '' #attends
                 )
         ret['events'] = "[%s]"%events[:-1]
 
@@ -141,3 +154,47 @@ class listCalendar(object):
             ret["start"].strftime('%m/%d/%Y %H:%M'),
             ret["end"].strftime('%m/%d/%Y %H:%M'),
             ret['events'])
+
+
+class updateCalendar(object):
+
+    @jsonable
+    def __call__(self):
+        request = self.request
+        context = self.context
+
+        calendarId = request.form.get('calendarId', None)
+        calendarStartTime = request.form.get('CalendarStartTime', None)
+        calendarEndTime = request.form.get('CalendarEndTime', None)
+
+
+class removeCalendar(object):
+
+    @jsonable
+    def __call__(self):
+        request = self.request
+        context = self.context
+
+        calendarId = request.form.get('calendarId', None)
+
+
+class detailedCalendar(object):
+
+    @jsonable
+    def __call__(self):
+        request = self.request
+        context = self.context
+
+        stpartdate = request.form.get('stpartdate', None)
+        stparttime = request.form.get('stparttime', None)
+
+        etpartdate = request.form.get('etpartdate', None)
+        etparttime = request.form.get('etparttime', None)
+
+        id = request.form.get('id', None)
+        subject = request.form.get('Subject', None)
+        isAllDayEvent = request.form.get('IsAllDayEvent', None)
+        description = request.form.get('Description', None)
+        location = request.form.get('Location', None)
+        colorvalue = request.form.get('colorvalue', None)
+        timezone = request.form.get('timezone', None)

@@ -162,3 +162,18 @@ class ICalendarEvent(IEvent, IEventLocation):
         required = False)
 
     cooked_text = interface.Attribute('Cooked text')
+
+    isAllDayEvent = schema.Bool(
+        title = _(u'All Day Event'),
+        required = False,
+        default = False)
+
+    color = schema.TextLine(
+        title = _(u'Color'),
+        required = False,
+        default = u'-1')
+
+    recurringRule = schema.TextLine(
+        title = _(u'Recurring Rule'),
+        required = False,
+        default = u'0')

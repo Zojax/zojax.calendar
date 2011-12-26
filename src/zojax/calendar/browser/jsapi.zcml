@@ -12,9 +12,33 @@
      permission="zope.Public" />
 
   <browser:page
+     name="add"
+     for=".jsapi.ICalendarAPI"
+     class=".jsapi.addCalendar"
+     permission="zope.Public" />
+
+  <browser:page
      name="list"
      for=".jsapi.ICalendarAPI"
      class=".jsapi.listCalendar"
+     permission="zope.Public" />
+
+  <browser:page
+     name="update"
+     for=".jsapi.ICalendarAPI"
+     class=".jsapi.updateCalendar"
+     permission="zope.Public" />
+
+  <browser:page
+     name="remove"
+     for=".jsapi.ICalendarAPI"
+     class=".jsapi.removeCalendar"
+     permission="zope.Public" />
+
+  <browser:page
+     name="adddetails"
+     for=".jsapi.ICalendarAPI"
+     class=".jsapi.detailedCalendar"
      permission="zope.Public" />
 
 </configure>
