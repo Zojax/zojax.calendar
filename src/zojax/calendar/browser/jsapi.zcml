@@ -1,0 +1,20 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax.calendar">
+
+  <!-- calendar js api -->
+  <browser:page
+     name="CalendarAPI"
+     for="..interfaces.ICalendarWorkspace"
+     class=".jsapi.CalendarAPI"
+     permission="zope.Public" />
+
+  <browser:page
+     name="list"
+     for=".jsapi.ICalendarAPI"
+     class=".jsapi.listCalendar"
+     permission="zope.Public" />
+
+</configure>
