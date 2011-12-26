@@ -36,6 +36,7 @@ Install product
     ...     'zojax-contenttypes', 'zojax-calendar']
     >>> actor.getControl(name='install').click()
 
+
 Add Event
 ---------
 
@@ -121,20 +122,52 @@ Calendar portlet
     ...
     </html>
 
+Calendar
+--------
 
-JSONRPC
--------
+add calendar workspace
 
-  >>> from datetime import datetime
-  >>> now = datetime.now().strftime('%Y/%m/%d %H:%M')
+    >>> actor.open("http://localhost/space/context.html/content/")
+    >>> actor.getLink('Workspaces').click()
+    >>> actor.getControl(name="workspaces.widgets.workspaces:list").value = ['calendar']
+    >>> actor.getControl(name="content.edit.buttons.save").click()
 
-  >>> from z3c.jsonrpc.testing import JSONRPCTestProxy
-  >>> siteURL = 'http://localhost/++skin++JSONRPC.calendar'
-  >>> b = Browser()
-  >>> b.handleErrors = False
-  >>> b.post(siteURL, "{'method':'listCalendar', 'params': {'showdate': '07/10/01 10:00', 'viewtype': 'month'}}", content_type='application/json')
-  >>> b.contents
-  '{"jsonrpc":"2.0","result":{"viewtype":"month","showdate":"07/10/01 10:00"},"id":"jsonrpc"}'
+    >>> actor.open("http://localhost/space/calendar/index.html")
+    >>> print actor.contents
+    <!DOCTYPE html...
+    ...
+    ...<h1>Calendar</h1>
+    <BLANKLINE>
+      <div>
+        No events have been created.
+      </div>
+    <BLANKLINE>
+    ...
+    </html>
+
+add calendar event
+('Attendees').value = u'Anna Suvorova'
+
+    >>> actor.open("http://localhost/space/calendar/context.html")
+    >>> actor.getLink('Calendar Event').click()
+
+    >>> actor.getControl('Title').value = u'Sandwich Day'
+    >>> actor.getControl('Description').value = u'It is the day when a family is preparing sandwiches.'
+    >>> actor.getControl('Event Starts').value = u'11/12/24 10:00'
+    >>> actor.getControl('Event Ends').value = u'11/12/24 18:00'
+    >>> actor.getControl('Event Location').value = u'Russia, Yeysk'
+    >>> actor.getControl('Event URL').value = u'http://zojax.com/'
+    >>> actor.getControl('Contact Name').value = u'Dmitry Suvorov'
+    >>> actor.getControl('Contact E-mail').value = u'suvdim@zojax.com'
+    >>> actor.getControl('Contact Phone').value = u'1234567890'
+    >>> actor.getControl('Body').value = u'We plan some preparing sandwiches.'
+    >>> actor.getControl('Short Name').value = 'sandwich-day'
+    >>> actor.getControl('Publish').click()
+
+jsapi
+
+    >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=month&showdate=2011/12/24")
+    >>> print actor.contents
 
 
 Uninstall product
