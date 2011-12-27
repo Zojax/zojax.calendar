@@ -96,7 +96,7 @@ class listCalendar(object):
                 showdate = datetime.strptime(showdate, '%m/%d/%Y')
             except ValueError:
                 # TODO: need return error
-                return """{"showdate": %s}"""%showdate
+                return encoder.encode({'success': 'false', 'message': '', 'showdate': showdate})
 
         if viewtype == 'month':
             lastDay = calendarModule.monthrange(showdate.year, showdate.month)[1]
@@ -174,8 +174,20 @@ class removeCalendar(object):
     def __call__(self):
         request = self.request
         context = self.context
+        container = self.context.context
 
         calendarId = request.form.get('calendarId', None)
+
+        if not calendarId:
+            return encoder.encode({'success': False, 'message': ''})
+
+        try:
+            del container[calendarId]
+            msg = {'IsSuccess': 'true', 'Msg': 'Succefully'}
+        except KeyError:
+            msg = {'IsSuccess': 'false', 'Msg': 'Event is not removed'}
+
+        return encoder.encode(msg)
 
 
 class detailedCalendar(object):

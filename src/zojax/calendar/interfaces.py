@@ -165,8 +165,7 @@ class ICalendarEvent(IEvent, IEventLocation):
 
     isAllDayEvent = schema.Bool(
         title = _(u'All Day Event'),
-        required = False,
-        default = False)
+        required = False)
 
     color = schema.TextLine(
         title = _(u'Color'),

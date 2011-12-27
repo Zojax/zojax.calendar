@@ -28,3 +28,6 @@ class CalendarEvent(PersistentItem):
     text = RichTextProperty(ICalendarEvent['text'])
     endDate = FieldProperty(ICalendarEvent['endDate'])
     startDate = FieldProperty(ICalendarEvent['startDate'])
+    isAllDayEvent = FieldProperty(ICalendarEvent['isAllDayEvent'])
+    recurringRule = FieldProperty(ICalendarEvent['recurringRule'])
+    color = FieldProperty(ICalendarEvent['color'])
