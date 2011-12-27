@@ -28,6 +28,8 @@ from zope.publisher.browser import BrowserView
 from zojax.catalog.interfaces import ICatalog
 from zope.publisher.interfaces import NotFound
 
+from zope.event import notify
+from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 
 class Encoder(JSONEncoder):
 
@@ -43,6 +45,19 @@ def jsonable(func):
         self.request.response.setHeader('Content-Type', ' application/json;charset=UTF-8')
         return unicode(func(self)).encode('utf-8')
     return cal
+
+
+def js2PythonTime(day):
+    """ convert str date to datetime """
+    try:
+        day = datetime.strptime(day, '%m/%d/%Y %H:%M')
+    except ValueError:
+        try:
+            day = datetime.strptime(day, '%m/%d/%Y')
+        except ValueError:
+            # TODO: need return error
+            return encoder.encode({'success': False, 'message': 'Error converting time', 'day': day})
+    return day
 
 
 class ICalendarAPI(interface.Interface):
@@ -88,15 +103,7 @@ class listCalendar(object):
         showdate = request.form.get('showdate', datetime.now().strftime('%m/%d/%Y %H:%M'))
         viewtype = request.form.get('viewtype', 'month')
 
-        # convert str date to datetime:
-        try:
-            showdate = datetime.strptime(showdate, '%m/%d/%Y %H:%M')
-        except ValueError:
-            try:
-                showdate = datetime.strptime(showdate, '%m/%d/%Y')
-            except ValueError:
-                # TODO: need return error
-                return encoder.encode({'success': 'false', 'message': '', 'showdate': showdate})
+        showdate = js2PythonTime(showdate)
 
         if viewtype == 'month':
             lastDay = calendarModule.monthrange(showdate.year, showdate.month)[1]
@@ -119,11 +126,11 @@ class listCalendar(object):
         catalog = getUtility(ICatalog)
 
         ret = {}
-        ret['events'] = ""
-        ret["issort"] = 'true'
-        ret["start"] = first_date
-        ret["end"] = last_date
-        ret['error'] = 'null'
+        ret['events'] = []
+        ret["issort"] = True
+        ret["start"] = first_date.strftime('%m/%d/%Y %H:%M')
+        ret["end"] = last_date.strftime('%m/%d/%Y %H:%M')
+        ret['error'] = None
 
         # select events from calendar within range:
         results = catalog.searchResults(
@@ -134,7 +141,7 @@ class listCalendar(object):
 
         events = ""
         for i in results:
-            events = events + """["%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s"],"""%(
+            ret['events'].append([
                 i.__name__,
                 i.title,
                 i.startDate.strftime('%m/%d/%Y %H:%M'),
@@ -147,13 +154,9 @@ class listCalendar(object):
                 1, #editable
                 i.location or 'null',
                 '' #attends
-                )
-        ret['events'] = "[%s]"%events[:-1]
+                ])
 
-        return """{"start":"%s", "issort":true, "end":"%s", "events":%s, "error":null}"""%(
-            ret["start"].strftime('%m/%d/%Y %H:%M'),
-            ret["end"].strftime('%m/%d/%Y %H:%M'),
-            ret['events'])
+        return encoder.encode(ret)
 
 
 class updateCalendar(object):
@@ -162,10 +165,27 @@ class updateCalendar(object):
     def __call__(self):
         request = self.request
         context = self.context
+        container = context.context
 
         calendarId = request.form.get('calendarId', None)
         calendarStartTime = request.form.get('CalendarStartTime', None)
         calendarEndTime = request.form.get('CalendarEndTime', None)
+
+        calendarStartTime = js2PythonTime(calendarStartTime)
+        calendarEndTime = js2PythonTime(calendarEndTime)
+
+        event = container.get(calendarId)
+        print event
+
+        if not event:
+            return encoder.encode({'IsSuccess': False, 'Msg': 'Event is not updated'})
+
+        event.startDate = calendarStartTime
+        event.endDate = calendarEndTime
+
+        notify(ObjectModifiedEvent(event))
+
+        return encoder.encode({'IsSuccess': True, 'Msg': 'Succefully'})
 
 
 class removeCalendar(object):
@@ -174,7 +194,7 @@ class removeCalendar(object):
     def __call__(self):
         request = self.request
         context = self.context
-        container = self.context.context
+        container = context.context
 
         calendarId = request.form.get('calendarId', None)
 
@@ -183,9 +203,9 @@ class removeCalendar(object):
 
         try:
             del container[calendarId]
-            msg = {'IsSuccess': 'true', 'Msg': 'Succefully'}
+            msg = {'IsSuccess': True, 'Msg': 'Succefully'}
         except KeyError:
-            msg = {'IsSuccess': 'false', 'Msg': 'Event is not removed'}
+            msg = {'IsSuccess': False, 'Msg': 'Event is not removed'}
 
         return encoder.encode(msg)
 
