@@ -165,7 +165,6 @@
       </div>
       <div style="clear: both"></div>
       <div class="infocontainer">
-<!-- action="php/datafeed.php?method=adddetails<?php echo isset($event)?"&id=".$event->Id:""; ?>" -->
         <form action="#" class="fform" id="fmEdit" method="post"
               tal:attributes="action string: ${context/@@absolute_url}/CalendarAPI/adddetails">
           <label>
