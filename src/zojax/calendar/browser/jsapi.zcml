@@ -41,4 +41,13 @@
      class=".jsapi.detailedCalendar"
      permission="zope.Public" />
 
+  <zojax:pagelet
+      name="edit.html"
+      layout="page"
+      for="..interfaces.ICalendarWorkspace"
+      template="edit.pt"
+      class=".jsapi.editCalendar"
+      permission="zope.View"
+      />
+
 </configure>

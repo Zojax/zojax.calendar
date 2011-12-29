@@ -30,6 +30,9 @@ from zope.publisher.interfaces import NotFound
 
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
+from zojax.resourcepackage.library import include
+
+from zojax.content.type.interfaces import IContentType
 
 class Encoder(JSONEncoder):
 
@@ -55,7 +58,6 @@ def js2PythonTime(day):
         try:
             day = datetime.strptime(day, '%m/%d/%Y')
         except ValueError:
-            # TODO: need return error
             return encoder.encode({'success': False, 'message': 'Error converting time', 'day': day})
     return day
 
@@ -84,21 +86,36 @@ class addCalendar(object):
 
     @jsonable
     def __call__(self):
-        request = self.request
-        context = self.context
+        context, request = self.context, self.request
+        container = context.context
 
         calendarStartTime = request.form.get('CalendarStartTime', None)
         calendarEndTime = request.form.get('CalendarEndTime', None)
-        calendarTitle = request.form.get('CalendarTitle', None)
+        eventTitle = request.form.get('CalendarTitle', None)
         isAllDayEvent = request.form.get('IsAllDayEvent', None)
+
+        try:
+            eventCt = getUtility(IContentType, name='calendar.event')
+            event = eventCt.create(title=eventTitle)
+
+            event.startDate = js2PythonTime(calendarStartTime)
+            event.endDate = js2PythonTime(calendarEndTime)
+            event.isAllDayEvent = bool(isAllDayEvent)
+
+            eventCt.__bind__(container).add(event)
+
+            msg = {'IsSuccess': True, 'Msg': 'Succefully'}
+        except:
+            msg = {'IsSuccess': False, 'Msg': 'Event is not created'}
+
+        return encoder.encode(msg)
 
 
 class listCalendar(object):
 
     @jsonable
     def __call__(self):
-        request = self.request
-        context = self.context
+        context, request = self.context, self.request
 
         showdate = request.form.get('showdate', datetime.now().strftime('%m/%d/%Y %H:%M'))
         viewtype = request.form.get('viewtype', 'month')
@@ -146,13 +163,13 @@ class listCalendar(object):
                 i.title,
                 i.startDate.strftime('%m/%d/%Y %H:%M'),
                 i.endDate.strftime('%m/%d/%Y %H:%M'),
-                i.isAllDayEvent or 'null',
+                i.isAllDayEvent,
                 0, #more than one day event
                    #InstanceType,
                 i.recurringRule,
                 i.color,
                 1, #editable
-                i.location or 'null',
+                i.location,
                 '' #attends
                 ])
 
@@ -163,8 +180,7 @@ class updateCalendar(object):
 
     @jsonable
     def __call__(self):
-        request = self.request
-        context = self.context
+        context, request = self.context, self.request
         container = context.context
 
         calendarId = request.form.get('calendarId', None)
@@ -175,7 +191,6 @@ class updateCalendar(object):
         calendarEndTime = js2PythonTime(calendarEndTime)
 
         event = container.get(calendarId)
-        print event
 
         if not event:
             return encoder.encode({'IsSuccess': False, 'Msg': 'Event is not updated'})
@@ -192,8 +207,7 @@ class removeCalendar(object):
 
     @jsonable
     def __call__(self):
-        request = self.request
-        context = self.context
+        context, request = self.context, self.request
         container = context.context
 
         calendarId = request.form.get('calendarId', None)
@@ -214,19 +228,116 @@ class detailedCalendar(object):
 
     @jsonable
     def __call__(self):
-        request = self.request
-        context = self.context
+        context, request = self.context, self.request
+        container = context.context
 
         stpartdate = request.form.get('stpartdate', None)
         stparttime = request.form.get('stparttime', None)
+        startDate = js2PythonTime(stpartdate + (stparttime and ' '+stparttime or ''))
 
         etpartdate = request.form.get('etpartdate', None)
         etparttime = request.form.get('etparttime', None)
+        endDate = js2PythonTime(etpartdate + (etparttime and ' '+etparttime or ''))
 
-        id = request.form.get('id', None)
+        eventId = request.form.get('id', None)
+
         subject = request.form.get('Subject', None)
         isAllDayEvent = request.form.get('IsAllDayEvent', None)
         description = request.form.get('Description', None)
         location = request.form.get('Location', None)
         colorvalue = request.form.get('colorvalue', None)
         timezone = request.form.get('timezone', None)
+
+        if eventId:
+            ret = self.updateDetailedCalendar(eventId, startDate, endDate, \
+                subject, isAllDayEvent, description, location, colorvalue, timezone)
+        else:
+            ret = self.addDetailedCalendar(startDate, endDate, subject, \
+                isAllDayEvent, description, location, colorvalue, timezone)
+
+        return ret
+
+    def updateDetailedCalendar(self, eventId, startDate, endDate, \
+        subject, isAllDayEvent, description, location, colorvalue, timezone):
+        context = self.context
+        container = context.context
+
+        if eventId and eventId in container:
+            event = container[eventId]
+
+            try:
+                event.title = subject
+                event.description = description
+                event.startDate = startDate
+                event.endDate = endDate
+                event.location = location
+                event.isAllDayEvent = bool(isAllDayEvent)
+                event.color = colorvalue
+                # ToDo: timezone ???
+
+                notify(ObjectModifiedEvent(event))
+
+                msg = {'IsSuccess': True, 'Msg': 'Succefully', 'Data': eventId}
+            except:
+                msg = {'IsSuccess': False, 'Msg': 'Event is not created'}
+        else:
+            msg = {'IsSuccess': False, 'Msg': 'Event is not created'}
+
+        return encoder.encode(msg)
+
+
+    def addDetailedCalendar(self, startDate, endDate, \
+        subject, isAllDayEvent, description, location, colorvalue, timezone):
+        context = self.context
+        container = context.context
+
+        try:
+            eventCt = getUtility(IContentType, name='calendar.event')
+            event = eventCt.create(title=subject)
+
+            event.description = description
+            event.startDate = startDate
+            event.endDate = endDate
+            event.location = location
+            event.isAllDayEvent = bool(isAllDayEvent)
+            event.color = colorvalue
+            # ToDo: timezone ???
+
+            eventCt.__bind__(container).add(event)
+
+            msg = {'IsSuccess': True, 'Msg': 'Succefully', 'Data': ''}
+        except:
+            msg = {'IsSuccess': False, 'Msg': 'Event is not created'}
+
+        return encoder.encode(msg)
+
+
+class addDetailedCalendar(object):
+
+    @jsonable
+    def __call__(self):
+        context, request = self.context, self.request
+
+
+class editCalendar(object):
+    """ popup form of editing calendar event """
+
+    def update(self):
+        include('jquery-wdcalendar')
+        context, request = self.context, self.request
+
+
+    def getEvent(self, eventId):
+        context = self.context
+
+        if eventId and eventId in context:
+            event = context[eventId]
+            info = {
+                'event': event,
+                'sdDate': event.startDate.strftime('%m/%d/%Y'),
+                'sdTime': event.startDate.strftime('%H:%M'),
+                'edDate': event.endDate.strftime('%m/%d/%Y'),
+                'edTime': event.endDate.strftime('%H:%M')}
+            return info
+
+        return
