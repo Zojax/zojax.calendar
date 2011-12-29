@@ -276,11 +276,6 @@
         </div>
 
   </div>
-
-
-    <tal:block repeat="event view/events">
-      <a href="#" tal:attributes="href event/@@absolute_url" tal:content="event/title"></a> <br />
-    </tal:block>
   </div>
 
 </tal:block>
