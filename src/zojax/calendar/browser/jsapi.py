@@ -33,6 +33,9 @@ from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 from zojax.resourcepackage.library import include
 
 from zojax.content.type.interfaces import IContentType
+from zojax.principal.field.utils import searchPrincipals
+from zojax.principal.profile.interfaces import IPersonalProfile
+from zojax.authentication.utils import getPrincipal
 
 class Encoder(JSONEncoder):
 
@@ -248,7 +251,10 @@ class detailedCalendar(object):
         colorvalue = request.form.get('colorvalue', None)
         timezone = request.form.get('timezone', None)
 
-        # ToDo: Attendees
+        attendees = request.form.get('attendees', None)
+        #import pdb; pdb.set_trace()
+        print '-'*10
+        print attendees
         eventUrl = request.form.get('eventUrl', None)
         contactName = request.form.get('contactName', None)
         contactEmail = request.form.get('contactEmail', None)
@@ -335,11 +341,19 @@ class detailedCalendar(object):
         return encoder.encode(msg)
 
 
-class addDetailedCalendar(object):
+class listMembers(object):
 
     @jsonable
     def __call__(self):
-        context, request = self.context, self.request
+
+        members = []
+        for member in searchPrincipals(type=('user',)):
+            oneMember = {}
+            oneMember["key"] = member.id
+            oneMember["value"] = member.title
+            members.append(oneMember)
+
+        return encoder.encode(members)
 
 
 class editCalendar(object):
