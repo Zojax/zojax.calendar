@@ -25,12 +25,16 @@ from interfaces import ICalendarEvent
 class CalendarEvent(PersistentItem):
     interface.implements(ICalendarEvent)
 
-    text = RichTextProperty(ICalendarEvent['text'])
     endDate = FieldProperty(ICalendarEvent['endDate'])
     startDate = FieldProperty(ICalendarEvent['startDate'])
-
     location = FieldProperty(ICalendarEvent['location'])
-
+    attendees = FieldProperty(ICalendarEvent['attendees'])
+    eventUrl = FieldProperty(ICalendarEvent['eventUrl'])
+    contactName = FieldProperty(ICalendarEvent['contactName'])
+    contactEmail = FieldProperty(ICalendarEvent['contactEmail'])
+    contactPhone = FieldProperty(ICalendarEvent['contactPhone'])
+    text = RichTextProperty(ICalendarEvent['text'])
     isAllDayEvent = FieldProperty(ICalendarEvent['isAllDayEvent'])
     recurringRule = FieldProperty(ICalendarEvent['recurringRule'])
     color = FieldProperty(ICalendarEvent['color'])
+

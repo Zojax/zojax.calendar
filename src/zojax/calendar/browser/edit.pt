@@ -186,12 +186,12 @@
 	                 tal:attributes="value editEvent/edDate|nothing" />
               <input MaxLength="50" class="required time" id="etparttime" name="etparttime" style="width:40px;" type="text" value=""
 	                 tal:attributes="value editEvent/edTime|nothing" />
-              <!--label class="checkp"
+              <label class="checkp"
                      tal:define="isAllDayEvent editEvent/event/isAllDayEvent|nothing">
                 <input id="IsAllDayEvent" name="IsAllDayEvent" type="checkbox" value="1"
 	                   tal:attributes="value isAllDayEvent;
 	                                   checked python:isAllDayEvent and 'checked' or None;" /> All Day Event
-              </label-->
+              </label>
             </div>
           </label>
           <label>
@@ -211,18 +211,28 @@
           <label>
             <span>Event URL:</span>
             <input MaxLength="300" id="eventUrl" name="eventUrl" style="width:95%;" type="text" value=""
-	               tal:attributes="value editEvent/event/eventUrl|nothing" />
+                   tal:attributes="value editEvent/event/eventUrl|nothing" />
           </label>
           <label>
             <span>Contact Name:</span>
-            <input MaxLength="300" id="contactName" name="contactName" style="width:95%;" type="text" value=""
-	               tal:attributes="value editEvent/event/contactName|nothing" />
+            <input MaxLength="200" id="contactName" name="contactName" style="width:95%;" type="text" value=""
+                   tal:attributes="value editEvent/event/contactName|nothing" />
           </label>
-
-
-
-
-
+          <label>
+            <span>Contact E-mail:</span>
+            <input MaxLength="200" id="contactEmail" name="contactEmail" style="width:95%;" type="text" value=""
+                   tal:attributes="value editEvent/event/contactEmail|nothing" />
+          </label>
+          <label>
+            <span>ContactPhone:</span>
+            <input MaxLength="200" id="contactPhone" name="contactPhone" style="width:95%;" type="text" value=""
+                   tal:attributes="value editEvent/event/contactPhone|nothing" />
+          </label>
+          <label>
+            <span>Body:</span>
+            <textarea cols="20" id="text" name="text" rows="2" style="width:95%; height:70px"
+                      tal:content="structure editEvent/event/text/cooked|nothing"></textarea>
+          </label>
           <input id="id" name="id" type="hidden" value=""
 	             tal:attributes="value editEvent/event/__name__|nothing" />
           <input id="timezone" name="timezone" type="hidden" value="" />

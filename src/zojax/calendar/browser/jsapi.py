@@ -248,17 +248,27 @@ class detailedCalendar(object):
         colorvalue = request.form.get('colorvalue', None)
         timezone = request.form.get('timezone', None)
 
+        # ToDo: Attendees
+        eventUrl = request.form.get('eventUrl', None)
+        contactName = request.form.get('contactName', None)
+        contactEmail = request.form.get('contactEmail', None)
+        contactPhone = request.form.get('contactPhone', None)
+        text = request.form.get('text', None)
+
         if eventId:
             ret = self.updateDetailedCalendar(eventId, startDate, endDate, \
-                subject, isAllDayEvent, description, location, colorvalue, timezone)
+                subject, isAllDayEvent, description, location, colorvalue, timezone, \
+                eventUrl, contactName, contactEmail, contactPhone, text)
         else:
             ret = self.addDetailedCalendar(startDate, endDate, subject, \
-                isAllDayEvent, description, location, colorvalue, timezone)
+                isAllDayEvent, description, location, colorvalue, timezone, \
+                eventUrl, contactName, contactEmail, contactPhone, text)
 
         return ret
 
     def updateDetailedCalendar(self, eventId, startDate, endDate, \
-        subject, isAllDayEvent, description, location, colorvalue, timezone):
+        subject, isAllDayEvent, description, location, colorvalue, timezone, \
+        eventUrl, contactName, contactEmail, contactPhone, text):
         context = self.context
         container = context.context
 
@@ -274,6 +284,12 @@ class detailedCalendar(object):
                 event.isAllDayEvent = bool(isAllDayEvent)
                 event.color = colorvalue
                 # ToDo: timezone ???
+                # ToDo: Attendees
+                event.eventUrl = eventUrl
+                event.contactName = contactName
+                event.contactEmail = contactEmail
+                event.contactPhone = contactPhone
+                event.text = text
 
                 notify(ObjectModifiedEvent(event))
 
@@ -287,7 +303,8 @@ class detailedCalendar(object):
 
 
     def addDetailedCalendar(self, startDate, endDate, \
-        subject, isAllDayEvent, description, location, colorvalue, timezone):
+        subject, isAllDayEvent, description, location, colorvalue, timezone, \
+        eventUrl, contactName, contactEmail, contactPhone, text):
         context = self.context
         container = context.context
 
@@ -302,6 +319,12 @@ class detailedCalendar(object):
             event.isAllDayEvent = bool(isAllDayEvent)
             event.color = colorvalue
             # ToDo: timezone ???
+            # ToDo: Attendees
+            event.eventUrl = eventUrl
+            event.contactName = contactName
+            event.contactEmail = contactEmail
+            event.contactPhone = contactPhone
+            event.text = text
 
             eventCt.__bind__(container).add(event)
 
