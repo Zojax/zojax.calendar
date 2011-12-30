@@ -19,6 +19,7 @@ from zope.component import getUtility
 
 from zojax.catalog.interfaces import ICatalog
 from zojax.resourcepackage.library import include
+from zope.security.management import checkPermission
 
 
 class ClendarView(object):
@@ -41,3 +42,6 @@ class ClendarView(object):
             return
 
         self.events = results
+
+    def isAvailableButtons(self):
+        return checkPermission('zojax.contenttype.AddCalendarEvent', self.context)

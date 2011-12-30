@@ -1,16 +1,14 @@
 <tal:block i18n:domain="zojax.calendar" tal:define="hasEvents view/hasEvents">
 
-  <h1 i18n:translate="">Calendar</h1>
-
   <div tal:condition="not:hasEvents" i18n:translate="">
     No events have been created.
   </div>
 
-  <div tal:condition="hasEvents">
-
+  <div>
 
     <script type="text/javascript">
         var CalendarAPI_URL = '<tal:block content="string: ${context/@@absolute_url}/CalendarAPI/" />';
+        var CalendarAPI_readonly = <tal:block content="python: view.isAvailableButtons and 'false' or 'true'" />;
     </script>
     <script type="text/javascript">
     // <![CDATA[
@@ -33,7 +31,8 @@
                 url: DATA_FEED_URL + "list",
                 quickAddUrl: DATA_FEED_URL + "add",
                 quickUpdateUrl: DATA_FEED_URL + "update",
-                quickDeleteUrl: DATA_FEED_URL + "remove"
+                quickDeleteUrl: DATA_FEED_URL + "remove",
+                readonly: CalendarAPI_readonly
             };
             var $dv = $("#calhead");
             var _MH = document.documentElement.clientHeight;
@@ -205,13 +204,13 @@
     <div>
 
       <div id="calhead" style="padding-left:1px;padding-right:1px;">
-            <div class="cHead"><div class="ftitle">My Calendar</div>
+            <div class="cHead"><div class="ftitle">Calendar</div>
             <div id="loadingpannel" class="ptogtitle loadicon" style="display: none;">Loading data...</div>
              <div id="errorpannel" class="ptogtitle loaderror" style="display: none;">Sorry, could not load your data, please try again later</div>
             </div>
-
             <div id="caltoolbar" class="ctoolbar">
-              <div id="faddbtn" class="fbutton">
+              <div id="faddbtn" class="fbutton"
+                   tal:condition="view/isAvailableButtons">
                 <div><span title='Click to Create New Event' class="addcal">
 
                 New Event
@@ -277,5 +276,4 @@
 
   </div>
   </div>
-
 </tal:block>

@@ -15,7 +15,7 @@
      name="add"
      for=".jsapi.ICalendarAPI"
      class=".jsapi.addCalendar"
-     permission="zope.Public" />
+     permission="zojax.contenttype.AddCalendarEvent" />
 
   <browser:page
      name="list"
@@ -27,19 +27,19 @@
      name="update"
      for=".jsapi.ICalendarAPI"
      class=".jsapi.updateCalendar"
-     permission="zope.Public" />
+     permission="zojax.contenttype.AddCalendarEvent" />
 
   <browser:page
      name="remove"
      for=".jsapi.ICalendarAPI"
      class=".jsapi.removeCalendar"
-     permission="zope.Public" />
+     permission="zojax.contenttype.AddCalendarEvent" />
 
   <browser:page
      name="adddetails"
      for=".jsapi.ICalendarAPI"
      class=".jsapi.detailedCalendar"
-     permission="zope.Public" />
+     permission="zojax.contenttype.AddCalendarEvent" />
 
   <zojax:pagelet
       name="edit.html"
@@ -47,7 +47,7 @@
       for="..interfaces.ICalendarWorkspace"
       template="edit.pt"
       class=".jsapi.editCalendar"
-      permission="zope.View"
+      permission="zojax.contenttype.AddCalendarEvent"
       />
 
 </configure>
