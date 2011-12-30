@@ -8,7 +8,7 @@
 
     <script type="text/javascript">
         var CalendarAPI_URL = '<tal:block content="string: ${context/@@absolute_url}/CalendarAPI/" />';
-        var CalendarAPI_readonly = <tal:block content="python: view.isAvailableButtons and 'false' or 'true'" />;
+        var CalendarAPI_readonly = <tal:block content="python: view.checkEditing() and 'false' or 'true'" />;
     </script>
     <script type="text/javascript">
     // <![CDATA[
@@ -210,7 +210,7 @@
             </div>
             <div id="caltoolbar" class="ctoolbar">
               <div id="faddbtn" class="fbutton"
-                   tal:condition="view/isAvailableButtons">
+                   tal:condition="view/checkEditing">
                 <div><span title='Click to Create New Event' class="addcal">
 
                 New Event

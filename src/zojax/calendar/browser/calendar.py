@@ -43,5 +43,5 @@ class ClendarView(object):
 
         self.events = results
 
-    def isAvailableButtons(self):
+    def checkEditing(self):
         return checkPermission('zojax.contenttype.AddCalendarEvent', self.context)

@@ -168,7 +168,7 @@
         <form action="#" class="fform" id="fmEdit" method="post"
               tal:attributes="action string: ${context/@@absolute_url}/CalendarAPI/adddetails">
           <label>
-            <span>*Subject:</span>
+            <span>*Title:</span>
             <div id="calendarcolor"> </div>
             <input MaxLength="200" class="required safe" id="Subject" name="Subject" style="width:85%;" type="text" value=""
 	               tal:attributes="value editEvent/event/title|nothing" />
@@ -186,12 +186,12 @@
 	                 tal:attributes="value editEvent/edDate|nothing" />
               <input MaxLength="50" class="required time" id="etparttime" name="etparttime" style="width:40px;" type="text" value=""
 	                 tal:attributes="value editEvent/edTime|nothing" />
-              <label class="checkp"
+              <!--label class="checkp"
                      tal:define="isAllDayEvent editEvent/event/isAllDayEvent|nothing">
                 <input id="IsAllDayEvent" name="IsAllDayEvent" type="checkbox" value="1"
 	                   tal:attributes="value isAllDayEvent;
 	                                   checked python:isAllDayEvent and 'checked' or None;" /> All Day Event
-              </label>
+              </label-->
             </div>
           </label>
           <label>
@@ -200,10 +200,29 @@
 	               tal:attributes="value editEvent/event/location|nothing" />
           </label>
           <label>
-            <span>Remark:</span>
+            <span>Description:</span>
             <textarea cols="20" id="Description" name="Description" rows="2" style="width:95%; height:70px"
                       tal:content="editEvent/event/description|nothing"></textarea>
           </label>
+          <label>
+            <span>Attendees:</span>
+            ???
+          </label>
+          <label>
+            <span>Event URL:</span>
+            <input MaxLength="300" id="eventUrl" name="eventUrl" style="width:95%;" type="text" value=""
+	               tal:attributes="value editEvent/event/eventUrl|nothing" />
+          </label>
+          <label>
+            <span>Contact Name:</span>
+            <input MaxLength="300" id="contactName" name="contactName" style="width:95%;" type="text" value=""
+	               tal:attributes="value editEvent/event/contactName|nothing" />
+          </label>
+
+
+
+
+
           <input id="id" name="id" type="hidden" value=""
 	             tal:attributes="value editEvent/event/__name__|nothing" />
           <input id="timezone" name="timezone" type="hidden" value="" />
