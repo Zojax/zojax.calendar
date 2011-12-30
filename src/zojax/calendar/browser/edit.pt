@@ -48,7 +48,8 @@
                 cache: true,
                 newel: false,
                 select_all_text: "select",
-                width: "95%"
+                width: "95%",
+                bricket: ""
             });
 
             //debugger;
@@ -220,10 +221,10 @@
           <label>
             <span>Attendees:</span>
             <select id="attendees" name="attendees">
-              <!--tal:block repeat="member getAllMembers">
+              <tal:block condition="editEvent" repeat="member editEvent/members">
                 <option tal:content="member/value" class="selected" value=""
                         tal:attributes="value member/key"></option>
-              </tal:block-->
+              </tal:block>
             </select>
           </label>
           <label>

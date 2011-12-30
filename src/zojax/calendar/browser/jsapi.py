@@ -54,7 +54,7 @@ def jsonable(func):
 
 
 def js2PythonTime(day):
-    """ convert str date to datetime """
+    """ converts str date to datetime """
     try:
         day = datetime.strptime(day, '%m/%d/%Y %H:%M')
     except ValueError:
@@ -63,6 +63,14 @@ def js2PythonTime(day):
         except ValueError:
             return encoder.encode({'success': False, 'message': 'Error converting time', 'day': day})
     return day
+
+def membersToTuple(members):
+    """ converts members to tuple """
+    if isinstance(members, list):
+        return tuple( members )
+    elif isinstance(members, basestring):
+        return (members,)
+    return ()
 
 
 class ICalendarAPI(interface.Interface):
@@ -252,9 +260,6 @@ class detailedCalendar(object):
         timezone = request.form.get('timezone', None)
 
         attendees = request.form.get('attendees', None)
-        #import pdb; pdb.set_trace()
-        print '-'*10
-        print attendees
         eventUrl = request.form.get('eventUrl', None)
         contactName = request.form.get('contactName', None)
         contactEmail = request.form.get('contactEmail', None)
@@ -264,17 +269,17 @@ class detailedCalendar(object):
         if eventId:
             ret = self.updateDetailedCalendar(eventId, startDate, endDate, \
                 subject, isAllDayEvent, description, location, colorvalue, timezone, \
-                eventUrl, contactName, contactEmail, contactPhone, text)
+                eventUrl, contactName, contactEmail, contactPhone, text, attendees)
         else:
             ret = self.addDetailedCalendar(startDate, endDate, subject, \
                 isAllDayEvent, description, location, colorvalue, timezone, \
-                eventUrl, contactName, contactEmail, contactPhone, text)
+                eventUrl, contactName, contactEmail, contactPhone, text, attendees)
 
         return ret
 
     def updateDetailedCalendar(self, eventId, startDate, endDate, \
         subject, isAllDayEvent, description, location, colorvalue, timezone, \
-        eventUrl, contactName, contactEmail, contactPhone, text):
+        eventUrl, contactName, contactEmail, contactPhone, text, attendees):
         context = self.context
         container = context.context
 
@@ -290,7 +295,7 @@ class detailedCalendar(object):
                 event.isAllDayEvent = bool(isAllDayEvent)
                 event.color = colorvalue
                 # ToDo: timezone ???
-                # ToDo: Attendees
+                event.attendees = membersToTuple(attendees)
                 event.eventUrl = eventUrl
                 event.contactName = contactName
                 event.contactEmail = contactEmail
@@ -301,16 +306,16 @@ class detailedCalendar(object):
 
                 msg = {'IsSuccess': True, 'Msg': 'Succefully', 'Data': eventId}
             except:
-                msg = {'IsSuccess': False, 'Msg': 'Event is not created'}
+                msg = {'IsSuccess': False, 'Msg': 'Event is not update'}
         else:
-            msg = {'IsSuccess': False, 'Msg': 'Event is not created'}
+            msg = {'IsSuccess': False, 'Msg': 'Event is not update'}
 
         return encoder.encode(msg)
 
 
     def addDetailedCalendar(self, startDate, endDate, \
         subject, isAllDayEvent, description, location, colorvalue, timezone, \
-        eventUrl, contactName, contactEmail, contactPhone, text):
+        eventUrl, contactName, contactEmail, contactPhone, text, attendees):
         context = self.context
         container = context.context
 
@@ -325,7 +330,7 @@ class detailedCalendar(object):
             event.isAllDayEvent = bool(isAllDayEvent)
             event.color = colorvalue
             # ToDo: timezone ???
-            # ToDo: Attendees
+            event.attendees = membersToTuple(attendees)
             event.eventUrl = eventUrl
             event.contactName = contactName
             event.contactEmail = contactEmail
@@ -363,18 +368,27 @@ class editCalendar(object):
         include('jquery-wdcalendar')
         context, request = self.context, self.request
 
-
     def getEvent(self, eventId):
         context = self.context
 
         if eventId and eventId in context:
             event = context[eventId]
+
+            members = []
+            for memeber in event.attendees:
+                principal = getPrincipal(memeber)
+                oneMember = {}
+                oneMember["key"] = memeber
+                oneMember["value"] = principal.title
+                members.append(oneMember)
+
             info = {
                 'event': event,
                 'sdDate': event.startDate.strftime('%m/%d/%Y'),
                 'sdTime': event.startDate.strftime('%H:%M'),
                 'edDate': event.endDate.strftime('%m/%d/%Y'),
-                'edTime': event.endDate.strftime('%H:%M')}
+                'edTime': event.endDate.strftime('%H:%M'),
+                'members': members}
             return info
 
         return
