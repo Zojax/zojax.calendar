@@ -97,7 +97,7 @@
                 if(data)
                 {
                     var url = StrFormat(eurl,data);
-                    OpenModelWindow(url,{ width: 600, height: 400, caption:"Manage  The Calendar",onclose:function(){
+                    OpenModelWindow(url,{ width: 600, height: 550, caption:"Manage  The Calendar",onclose:function(){
                        $("#gridcontainer").reload();
                     }});
                 }
@@ -172,7 +172,7 @@
             //Add a new event
             $("#faddbtn").click(function(e) {
                 var url ="edit.html";
-                OpenModelWindow(url,{ width: 500, height: 400, caption: "Create New Calendar"});
+                OpenModelWindow(url,{ width: 500, height: 550, caption: "Create New Calendar"});
             });
             //go to today
             $("#showtodaybtn").click(function(e) {
