@@ -296,9 +296,9 @@ class detailedCalendar(object):
                 event.color = colorvalue
                 # ToDo: timezone ???
                 event.attendees = membersToTuple(attendees)
-                event.eventUrl = eventUrl
+                event.eventUrl = bool(eventUrl) and eventUrl or None
                 event.contactName = contactName
-                event.contactEmail = contactEmail
+                event.contactEmail = bool(contactEmail) and contactEmail or None
                 event.contactPhone = contactPhone
                 event.text = text
 
@@ -331,9 +331,9 @@ class detailedCalendar(object):
             event.color = colorvalue
             # ToDo: timezone ???
             event.attendees = membersToTuple(attendees)
-            event.eventUrl = eventUrl
+            event.eventUrl = bool(eventUrl) and eventUrl or None
             event.contactName = contactName
-            event.contactEmail = contactEmail
+            event.contactEmail = bool(contactEmail) and contactEmail or None
             event.contactPhone = contactPhone
             event.text = text
 

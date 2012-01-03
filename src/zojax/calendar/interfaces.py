@@ -142,7 +142,8 @@ class ICalendarEvent(IEvent, IEventLocation):
     eventUrl = BaseURL(
         title = _(u'Event URL'),
         description = _(u'Web address with more info about the event.'),
-        required = False)
+        required = False,
+        default = None)
 
     contactName = schema.TextLine(
         title = _(u'Contact Name'),
@@ -150,7 +151,8 @@ class ICalendarEvent(IEvent, IEventLocation):
 
     contactEmail = RFC822MailAddress(
         title = _(u'Contact E-mail'),
-        required = False)
+        required = False,
+        default = None)
 
     contactPhone = schema.TextLine(
         title = _(u'Contact Phone'),
