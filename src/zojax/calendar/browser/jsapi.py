@@ -356,8 +356,8 @@ class listMembers(object):
         location = request.form.get('tag', None)
 
         query = dict(type=('user',),)
-        if location:
-            query['searchableText'] = location
+        if tag:
+            query['searchableText'] = tag
 
         members = []
         for member in searchPrincipals(**query)[:10]:
