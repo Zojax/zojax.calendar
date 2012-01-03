@@ -144,6 +144,10 @@
             $.validator.addMethod("safe", function(value, element) {
                 return this.optional(element) || /^[^$\<\>]+$/.test(value);
             }, "$<> not allowed");
+            $.validator.addMethod("eventUrl", function(value, element) {
+                if (value.length == 0) { return true; }
+                return this.optional(element) || /^(http:\/\/|https:\/\/).+(\/)$/.test(value);
+            }, "Invalid URL format, start with http:// and end with / ");
             $("#fmEdit").validate({
                 submitHandler: function(form) { $("#fmEdit").ajaxSubmit(options); },
                 errorElement: "div",
@@ -230,7 +234,7 @@
           <label>
             <span>Event URL:</span>
             <input MaxLength="300" id="eventUrl" name="eventUrl" style="width:95%;" type="text" value=""
-                   tal:attributes="value editEvent/event/eventUrl|nothing" />
+                   tal:attributes="value editEvent/event/eventUrl|nothing" class="eventUrl" />
           </label>
           <label>
             <span>Contact Name:</span>
