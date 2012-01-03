@@ -116,8 +116,8 @@ class addCalendar(object):
             eventCt.__bind__(container).add(event)
 
             msg = {'IsSuccess': True, 'Msg': 'Succefully'}
-        except:
-            msg = {'IsSuccess': False, 'Msg': 'Event is not created'}
+        except Exception, e:
+            msg = {'IsSuccess': False, 'Msg': 'Event is not created: %s'%e}
 
         return encoder.encode(msg)
 
@@ -305,8 +305,8 @@ class detailedCalendar(object):
                 notify(ObjectModifiedEvent(event))
 
                 msg = {'IsSuccess': True, 'Msg': 'Succefully', 'Data': eventId}
-            except:
-                msg = {'IsSuccess': False, 'Msg': 'Event is not update'}
+            except Exception, e:
+                msg = {'IsSuccess': False, 'Msg': 'Event is not update: %s'%e}
         else:
             msg = {'IsSuccess': False, 'Msg': 'Event is not update'}
 
@@ -340,8 +340,8 @@ class detailedCalendar(object):
             eventCt.__bind__(container).add(event)
 
             msg = {'IsSuccess': True, 'Msg': 'Succefully', 'Data': ''}
-        except:
-            msg = {'IsSuccess': False, 'Msg': 'Event is not created'}
+        except Exception, e:
+            msg = {'IsSuccess': False, 'Msg': 'Event is not created: %s'%e}
 
         return encoder.encode(msg)
 
