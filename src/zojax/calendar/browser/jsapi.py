@@ -353,7 +353,7 @@ class listMembers(object):
         context, request = self.context, self.request
         container = context.context
 
-        location = request.form.get('tag', None)
+        tag = request.form.get('tag', None)
 
         query = dict(type=('user',),)
         if tag:
