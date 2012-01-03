@@ -350,9 +350,17 @@ class listMembers(object):
 
     @jsonable
     def __call__(self):
+        context, request = self.context, self.request
+        container = context.context
+
+        location = request.form.get('tag', None)
+
+        query = dict(type=('user',),)
+        if location:
+            query['searchableText'] = location
 
         members = []
-        for member in searchPrincipals(type=('user',)):
+        for member in searchPrincipals(**query)[:10]:
             oneMember = {}
             oneMember["key"] = member.id
             oneMember["value"] = member.title
