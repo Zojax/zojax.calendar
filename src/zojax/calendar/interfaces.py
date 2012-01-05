@@ -18,6 +18,7 @@ $Id$
 from zope import schema, interface
 from zope.i18nmessageid import MessageFactory
 from zojax.content.space.interfaces import IWorkspace, IWorkspaceFactory
+from zojax.content.notifications.interfaces import IContentNotification
 
 from z3c.schema.baseurl import BaseURL
 from z3c.schema.email import RFC822MailAddress
@@ -179,3 +180,7 @@ class ICalendarEvent(IEvent, IEventLocation):
         title = _(u'Recurring Rule'),
         required = False,
         default = u'0')
+
+
+class IEventNotification(IContentNotification):
+    """ event notification """

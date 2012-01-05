@@ -66,4 +66,7 @@
   <!-- calendar event declaration -->
   <include file="calendarevent.zcml" />
 
+  <!-- calendar event notifications -->
+  <include file="notifications.zcml" />
+
 </configure>
