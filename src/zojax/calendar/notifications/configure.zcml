@@ -23,15 +23,15 @@
        interface=".interfaces.IEventNotification" />
   </class>
 
+  <utility
+     name="event"
+     factory=".notifications.EventNotificationDescription" />
+
   <subscriber handler=".notifications.CalendarEventAdded" />
 
   <subscriber handler=".notifications.CalendarEventModified" />
 
   <subscriber handler=".notifications.CalendarEventRemoved" />
-
-  <utility
-     name="event"
-     factory=".notifications.EventNotificationDescription" />
 
   <!-- event preview -->
   <zojax:pagelet

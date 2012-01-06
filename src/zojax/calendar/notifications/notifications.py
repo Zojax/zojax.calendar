@@ -17,11 +17,12 @@ $Id$
 """
 from zope import interface, component
 
-from zope.app.container.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from zope.app.container.interfaces import IObjectRemovedEvent
+from zope.app.container.interfaces import IObjectAddedEvent, IObjectRemovedEvent
 
-from zojax.subscription.interfaces import ISubscriptionDescription
+from zojax.ownership.interfaces import IOwnership
+from zojax.subscription.interfaces import ISubscriptionDescription,\
+    SubscriptionException
 from zojax.content.notifications.utils import sendNotification
 from zojax.content.notifications.notification import Notification
 
@@ -47,26 +48,83 @@ class EventNotificationDescription(object):
 
 @component.adapter(ICalendarEvent, IObjectAddedEvent)
 def CalendarEventAdded(object, ev):
-    """ """
+    """ sends emails when the event is created """
+    principals = ()
+    owner = IOwnership(object).owner.id
     attendees = object.attendees or None
-    if attendees is not None:
-        # ToDo: send notification for author?
-        sendNotification('event', object, ev, principal={'any_of': attendees})
+    notification = component.getAdapter(object.__parent__, IEventNotification, 'event')
+
+    if attendees:
+        if owner not in attendees:
+            principals += (owner, )
+        principals += attendees
+
+    if not attendees:
+        principals += (owner, )
+
+    #check subscribe
+    for principal in principals:
+        try:
+            if not notification.isSubscribed(principal):
+                notification.subscribe()
+        except SubscriptionException:
+            pass
+
+    # send notifications
+    sendNotification('event', object, ev, principal={'any_of': principals})
 
 
 @component.adapter(ICalendarEvent, IObjectModifiedEvent)
 def CalendarEventModified(object, ev):
-    """ """
+    """ sends emails when the event is modified """
+    principals = ()
+    owner = IOwnership(object).owner.id
     attendees = object.attendees or None
-    if attendees is not None:
-        # ToDo: send notification for author?
-        sendNotification('event', object, ev, principal={'any_of': attendees})
+    notification = component.getAdapter(object.__parent__, IEventNotification, 'event')
+
+    if attendees:
+        if owner not in attendees:
+            principals += (owner, )
+        principals += attendees
+
+    if not attendees:
+        principals += (owner, )
+
+    #check subscribe
+    #for principal in principals:
+    #    try:
+    #        if not notification.isSubscribed(principal):
+    #            notification.subscribe()
+    #    except SubscriptionException:
+    #        pass
+
+    # send notifications
+    sendNotification('event', object, ev, principal={'any_of': principals})
 
 
 @component.adapter(ICalendarEvent, IObjectRemovedEvent)
 def CalendarEventRemoved(object, ev):
-    """ """
+    """ sends emails when the event is removed """
+    principals = ()
+    owner = IOwnership(object).owner.id
     attendees = object.attendees or None
-    if attendees is not None:
-        # ToDo: send notification for author?
-        sendNotification('event', object, ev, principal={'any_of': attendees})
+    notification = component.getAdapter(object.__parent__, IEventNotification, 'event')
+
+    if attendees:
+        if owner not in attendees:
+            principals += (owner, )
+        principals += attendees
+
+    if not attendees:
+        principals += (owner, )
+
+    #check subscribe
+    #for principal in principals:
+    #    try:
+    #        if not notification.isSubscribed(principal):
+    #            notification.subscribe()
+    #    except SubscriptionException:
+    #        pass
+
+    # send notifications
+    sendNotification('event', object, ev, principal={'any_of': principals})
