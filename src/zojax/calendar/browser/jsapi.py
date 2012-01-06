@@ -224,13 +224,13 @@ class removeCalendar(object):
         calendarId = request.form.get('calendarId', None)
 
         if not calendarId:
-            return encoder.encode({'success': False, 'message': ''})
+            return encoder.encode({'success': False, 'message': 'Event is not removed'})
 
         try:
             del container[calendarId]
             msg = {'IsSuccess': True, 'Msg': 'Succefully'}
-        except KeyError:
-            msg = {'IsSuccess': False, 'Msg': 'Event is not removed'}
+        except KeyError, e:
+            msg = {'IsSuccess': False, 'Msg': 'Event is not removed: %s'%e}
 
         return encoder.encode(msg)
 
