@@ -35,6 +35,7 @@ from zojax.assignment.interfaces import IAssignments
 from zojax.workflow.interfaces import IWorkflowState
 from zojax.principal.profile.interfaces import IPersonalProfile
 from zojax.authentication.utils import getPrincipal
+from zojax.personal.space.interfaces import IPersonalSpace
 
 from zojax.calendar.interfaces import ICalendarEvent
 
@@ -79,7 +80,12 @@ class EventNotification(object):
         for memeber in context.attendees:
             principal = getPrincipal(memeber)
             oneMember = {}
-            oneMember["url"] = u'%s/'%absoluteURL(principal, request)
+
+            homeFolder = IPersonalSpace(principal, None)
+            profileUrl = homeFolder is not None \
+                and '%s/profile/'%absoluteURL(homeFolder, request) or ''
+
+            oneMember["url"] = profileUrl
             oneMember["title"] = principal.title
             members.append(oneMember)
 
@@ -110,7 +116,6 @@ class EventAddedNotification(EventNotification):
     @property
     def subject(self):
         return u'Event created "%s"'%self.context.title
-        #return u'%s: Event created "%s"'%(self.project.title, self.context.title)
 
 
 class EventModifiedNotification(EventNotification):

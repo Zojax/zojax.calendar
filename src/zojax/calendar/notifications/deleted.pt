@@ -1,9 +1,8 @@
 <div class="container">
   <strong i18n:translate="">
-    <tal:block content="view/author" i18n:name="author"/> has deleted event.
+    <tal:block content="view/author" i18n:name="author"/> has deleted event
+    "<tal:block content="context/title" i18n:name="title" />"
+    in the
+    "<a tal:attributes="href view/calendarUrl" i18n:name="calendar_title">Calendar</a>"
   </strong>
-  <br /><br />
-  <tal:block i18n:translate="">
-  Event: <tal:block content="context/title" i18n:name="title" />
-  </tal:block>
 </div>

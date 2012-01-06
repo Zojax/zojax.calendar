@@ -2,10 +2,10 @@
 
 <div class="information">
   <table tal:define="event context/info/event">
-    <tr tal:condition="context/owner">
+    <!--tr tal:condition="context/owner">
       <th i18n:translate="">&bull; Submitted by</th>
       <td tal:content="context/owner/title"></td>
-    </tr>
+    </tr-->
     <tr tal:condition="event/description">
       <th i18n:translate="">&bull; Description</th>
       <td class="nowrap"
@@ -30,8 +30,8 @@
       <th i18n:translate="">&bull; Attendees</th>
       <td class="nowrap">
         <tal:block repeat="member context/info/members">
-          <tal:member content="member/url" /><br />
-          <tal:member content="member/title" /><br />
+	      <a tal:attributes="href member/url"
+	         tal:content="member/title" href="#"></a><br />
         </tal:block>
       </td>
     </tr>
@@ -50,8 +50,8 @@
     <tr tal:condition="event/contactEmail">
       <th i18n:translate="">&bull; Contact E-mail</th>
       <td class="nowrap">
-        <atal:define="email event/contactEmail"
-           tal:attributes="href string:mailto:$email"
+        <a tal:define="email event/contactEmail"
+           tal:attributes="href string:mailto:${email}"
            tal:content="email" href=""></a>
       </td>
     </tr>
