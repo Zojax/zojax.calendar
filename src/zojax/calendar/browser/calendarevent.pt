@@ -17,7 +17,7 @@
         <th i18n:translate="">Contact Name</th>
         <td tal:content="context/contactName">John Smith</td>
       </tr>
-      <tr tal:define="contact_email context/contactEmail" 
+      <tr tal:define="contact_email context/contactEmail"
 	  tal:condition="contact_email">
         <th i18n:translate="">Contact E-mail</th>
         <td>
@@ -30,8 +30,20 @@
         <td tal:content="context/contactPhone">555-GET-PLONE</td>
       </tr>
       <tr tal:condition="context/attendees">
-	<th i18n:translate="">Attendees</th>
-        <td tal:content="python: ', '.join(context.attendees)">Person 1, Person 2</td>
+	    <th i18n:translate="">Attendees</th>
+        <td>
+          <tal:block repeat="member python:view.getMemberInfo(context.attendees)">
+            <a tal:attributes="href member/url"
+	           tal:content="member/title" href="#"></a><br />
+          </tal:block>
+        </td>
+      </tr>
+      <tr tal:condition="context/eventUrl">
+        <th i18n:translate="">Event URL</th>
+        <td>
+	      <a tal:attributes="href context/eventUrl"
+	         tal:content="context/eventUrl" href="#"></a>
+        </td>
       </tr>
     </tbody>
   </table>

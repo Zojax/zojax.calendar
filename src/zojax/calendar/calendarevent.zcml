@@ -58,6 +58,7 @@
        for=".interfaces.ICalendarEvent"
        template="browser/calendarevent.pt"
        provides="zojax.content.type.interfaces.IContentView"
+       class=".browser.calendarevent.ClendarEventView"
        permission="zope.View" />
 
     <!-- permissions -->

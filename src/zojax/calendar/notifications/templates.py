@@ -77,8 +77,8 @@ class EventNotification(object):
         self.owner = IOwnership(context).owner
 
         members = []
-        for memeber in context.attendees:
-            principal = getPrincipal(memeber)
+        for member in context.attendees:
+            principal = getPrincipal(member)
             oneMember = {}
 
             homeFolder = IPersonalSpace(principal, None)
