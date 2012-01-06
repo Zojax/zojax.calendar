@@ -149,6 +149,10 @@ class EventDeletedNotification(object):
         self.addHeader(u'From', formataddr((self.author, mailer.email_from_address),))
 
         self.url = '%s/'%absoluteURL(context, request)
+        self.calendar = context.__parent__
+
+        # calendar
+        self.calendarUrl = u'%s/'%absoluteURL(self.calendar, request)
 
     @property
     def subject(self):
