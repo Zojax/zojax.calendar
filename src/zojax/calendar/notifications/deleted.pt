@@ -1,0 +1,9 @@
+<div class="container">
+  <strong i18n:translate="">
+    <tal:block content="view/author" i18n:name="author"/> has deleted event.
+  </strong>
+  <br /><br />
+  <tal:block i18n:translate="">
+  Event: <tal:block content="context/title" i18n:name="title" />
+  </tal:block>
+</div>

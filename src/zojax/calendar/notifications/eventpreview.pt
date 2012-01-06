@@ -1,0 +1,68 @@
+<h2 class="heading" i18n:translate="">Event information</h2>
+
+<div class="information">
+  <table tal:define="event context/info/event">
+    <tr tal:condition="context/owner">
+      <th i18n:translate="">&bull; Submitted by</th>
+      <td tal:content="context/owner/title"></td>
+    </tr>
+    <tr tal:condition="event/description">
+      <th i18n:translate="">&bull; Description</th>
+      <td class="nowrap"
+	  tal:content="event/description|nothing"></td>
+    </tr>
+    <tr>
+      <th i18n:translate="">&bull; Time</th>
+      <td class="nowrap">
+        <tal:block replace="context/info/sdDate|nothing" />
+        <tal:block replace="context/info/sdTime|nothing" />
+        <br />
+        <tal:block replace="context/info/edDate|nothing" />
+        <tal:block replace="context/info/edTime|nothing" />
+      </td>
+    </tr>
+    <tr tal:condition="event/location">
+      <th i18n:translate="">&bull; Event location</th>
+      <td class="nowrap"
+	  tal:content="event/location|nothing"></td>
+    </tr>
+    <tr tal:condition="context/info/members">
+      <th i18n:translate="">&bull; Attendees</th>
+      <td class="nowrap">
+        <tal:block repeat="member context/info/members">
+          <tal:member content="member/url" /><br />
+          <tal:member content="member/title" /><br />
+        </tal:block>
+      </td>
+    </tr>
+    <tr tal:condition="event/eventUrl">
+      <th i18n:translate="">&bull; Event URL</th>
+      <td class="nowrap">
+	    <a tal:attributes="href event/eventUrl"
+	       tal:content="event/eventUrl" href="#"></a>
+	  </td>
+    </tr>
+    <tr tal:condition="event/contactName">
+      <th i18n:translate="">&bull; Contact Name</th>
+      <td class="nowrap"
+	  tal:content="event/contactName|nothing"></td>
+    </tr>
+    <tr tal:condition="event/contactEmail">
+      <th i18n:translate="">&bull; Contact E-mail</th>
+      <td class="nowrap">
+        <atal:define="email event/contactEmail"
+           tal:attributes="href string:mailto:$email"
+           tal:content="email" href=""></a>
+      </td>
+    </tr>
+    <tr tal:condition="event/contactPhone">
+      <th i18n:translate="">&bull; Contact Phone</th>
+      <td class="nowrap"
+	  tal:content="event/contactPhone|nothing"></td>
+    </tr>
+  </table>
+</div>
+<br /><br />
+<div class="event-text"
+     tal:content="structure context/text"></div>
+<div style="clear:both;"></div>

@@ -1,0 +1,72 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:i18n="http://namespaces.zope.org/i18n"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   i18n_domain="zojax.calendar">
+
+  <zojax:pageletType
+     name="calendar.event.mail"
+     interface=".interfaces.IEventMailView" />
+
+  <adapter
+     name="event"
+     factory=".notifications.EventNotification" />
+
+  <adapter
+     name="event"
+     for="zojax.calendar.interfaces.ICalendar"
+     factory=".notifications.EventNotification" />
+
+  <class class=".notifications.EventNotification">
+    <require
+       permission="zope.View"
+       interface=".interfaces.IEventNotification" />
+  </class>
+
+  <subscriber handler=".notifications.CalendarEventAdded" />
+
+  <subscriber handler=".notifications.CalendarEventModified" />
+
+  <subscriber handler=".notifications.CalendarEventRemoved" />
+
+  <utility
+     name="event"
+     factory=".notifications.EventNotificationDescription" />
+
+  <!-- event preview -->
+  <zojax:pagelet
+     type="calendar.event.mail"
+     for=".templates.EventNotification"
+     template="eventpreview.pt" />
+
+  <!-- event added -->
+  <zojax:mailtemplate
+     for="..interfaces.ICalendarEvent
+	  zope.app.container.interfaces.IObjectAddedEvent"
+     contentType="text/html"
+     template="added.pt"
+     class=".templates.EventAddedNotification"
+     provides="zojax.content.notifications.interfaces.INotificationMailTemplate"
+     />
+
+  <!-- event modified -->
+  <zojax:mailtemplate
+     for="..interfaces.ICalendarEvent
+	  zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+     contentType="text/html"
+     template="modified.pt"
+     class=".templates.EventModifiedNotification"
+     provides="zojax.content.notifications.interfaces.INotificationMailTemplate"
+     />
+
+  <!-- event deleted -->
+  <zojax:mailtemplate
+     for="..interfaces.ICalendarEvent
+	  zope.app.container.interfaces.IObjectRemovedEvent"
+     contentType="text/html"
+     template="deleted.pt"
+     class=".templates.EventDeletedNotification"
+     provides="zojax.content.notifications.interfaces.INotificationMailTemplate"
+     />
+
+</configure>

@@ -53,6 +53,9 @@
 
     <!-- browser views -->
     <include package=".browser" />
+
+    <!-- calendar event notifications -->
+    <include package=".notifications" />
   </registerIn>
 
   <include package=".browser" file="styles.zcml" />
@@ -65,8 +68,5 @@
 
   <!-- calendar event declaration -->
   <include file="calendarevent.zcml" />
-
-  <!-- calendar event notifications -->
-  <include file="notifications.zcml" />
 
 </configure>

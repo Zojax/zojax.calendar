@@ -17,17 +17,16 @@ $Id$
 """
 from zope import interface, component
 
-from zope.app.intid.interfaces import IIntIdAddedEvent
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.app.container.interfaces import IObjectRemovedEvent
-from zojax.content.draft.interfaces import IDraftPublishedEvent
 
 from zojax.subscription.interfaces import ISubscriptionDescription
 from zojax.content.notifications.utils import sendNotification
 from zojax.content.notifications.notification import Notification
 
-from interfaces import _, ICalendarEvent, ICalendarWorkspace, IEventNotification
+from zojax.calendar.interfaces import _, ICalendarEvent, ICalendarWorkspace
+from interfaces import IEventNotification
 
 
 class EventNotification(Notification):
@@ -58,8 +57,16 @@ def CalendarEventAdded(object, ev):
 @component.adapter(ICalendarEvent, IObjectModifiedEvent)
 def CalendarEventModified(object, ev):
     """ """
+    attendees = object.attendees or None
+    if attendees is not None:
+        # ToDo: send notification for author?
+        sendNotification('event', object, ev, principal={'any_of': attendees})
 
 
 @component.adapter(ICalendarEvent, IObjectRemovedEvent)
 def CalendarEventRemoved(object, ev):
     """ """
+    attendees = object.attendees or None
+    if attendees is not None:
+        # ToDo: send notification for author?
+        sendNotification('event', object, ev, principal={'any_of': attendees})

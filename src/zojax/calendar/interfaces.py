@@ -180,7 +180,3 @@ class ICalendarEvent(IEvent, IEventLocation):
         title = _(u'Recurring Rule'),
         required = False,
         default = u'0')
-
-
-class IEventNotification(IContentNotification):
-    """ event notification """

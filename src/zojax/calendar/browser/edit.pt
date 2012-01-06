@@ -247,7 +247,7 @@
                    tal:attributes="value editEvent/event/contactEmail|nothing" />
           </label>
           <label>
-            <span>ContactPhone:</span>
+            <span>Contact Phone:</span>
             <input MaxLength="200" id="contactPhone" name="contactPhone" style="width:95%;" type="text" value=""
                    tal:attributes="value editEvent/event/contactPhone|nothing" />
           </label>
