@@ -35,15 +35,15 @@ class EventNotification(Notification):
     interface.implementsOnly(IEventNotification)
 
     type = u'event'
-    title = _(u'Calendar Event')
-    description = _(u'Notification for Calendar Event')
+    title = _(u'Calendar Events')
+    description = _(u'Notification for Calendar Events')
 
 
 class EventNotificationDescription(object):
     interface.implements(ISubscriptionDescription)
 
-    title = _(u'Calendar Event')
-    description = _(u'Notification for Calendar Event')
+    title = _(u'Calendar Events')
+    description = _(u'Notification for Calendar Events')
 
 
 @component.adapter(ICalendarEvent, IObjectAddedEvent)
@@ -66,7 +66,7 @@ def CalendarEventAdded(object, ev):
     for principal in principals:
         try:
             if not notification.isSubscribed(principal):
-                notification.subscribe()
+                notification.subscribe(principal)
         except SubscriptionException:
             pass
 
@@ -91,12 +91,12 @@ def CalendarEventModified(object, ev):
         principals += (owner, )
 
     #check subscribe
-    #for principal in principals:
-    #    try:
-    #        if not notification.isSubscribed(principal):
-    #            notification.subscribe()
-    #    except SubscriptionException:
-    #        pass
+    for principal in principals:
+        try:
+            if not notification.isSubscribed(principal):
+                notification.subscribe(principal)
+        except SubscriptionException:
+            pass
 
     # send notifications
     sendNotification('event', object, ev, principal={'any_of': principals})
@@ -117,14 +117,6 @@ def CalendarEventRemoved(object, ev):
 
     if not attendees:
         principals += (owner, )
-
-    #check subscribe
-    #for principal in principals:
-    #    try:
-    #        if not notification.isSubscribed(principal):
-    #            notification.subscribe()
-    #    except SubscriptionException:
-    #        pass
 
     # send notifications
     sendNotification('event', object, ev, principal={'any_of': principals})
