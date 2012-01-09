@@ -37,6 +37,9 @@ from zojax.principal.field.utils import searchPrincipals
 from zojax.principal.profile.interfaces import IPersonalProfile
 from zojax.authentication.utils import getPrincipal
 
+from zojax.personal.space.interfaces import IPersonalSpace
+from zope.traversing.browser import absoluteURL
+
 class Encoder(JSONEncoder):
 
     def encode(self, *kv, **kw):
@@ -169,6 +172,22 @@ class listCalendar(object):
 
         events = ""
         for i in results:
+
+            members = []
+            if i.attendees:
+                for member in i.attendees:
+                    principal = getPrincipal(member)
+                    oneMember = {}
+
+                    homeFolder = IPersonalSpace(principal, None)
+                    profileUrl = homeFolder is not None \
+                        and '%s/profile/'%absoluteURL(homeFolder, self.request) or ''
+
+                    oneMember["url"] = profileUrl
+                    oneMember["title"] = principal.title
+                    members.append(oneMember)
+
+
             ret['events'].append([
                 i.__name__,
                 i.title,
@@ -181,7 +200,13 @@ class listCalendar(object):
                 i.color,
                 1, #editable
                 i.location,
-                '' #attends
+                i.description, #10
+                members, #attends
+                i.eventUrl,
+                i.contactName,
+                i.contactEmail,
+                i.contactPhone,
+                '' #i.text
                 ])
 
         return encoder.encode(ret)

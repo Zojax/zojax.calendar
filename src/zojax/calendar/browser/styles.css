@@ -63,4 +63,15 @@
     border: 2px borderStyle notifyBorderColor;
   }
 
+  #bbit-cs-location,
+  #bbit-cs-description,
+  #bbit-cs-attendeers,
+  #bbit-cs-eventUrl,
+  #bbit-cs-CName,
+  #bbit-cs-CEmail,
+  #bbit-cs-CPhone,
+  #bbit-cs-body {
+    display: none;
+  }
+
 }
