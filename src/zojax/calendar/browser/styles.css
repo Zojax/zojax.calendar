@@ -74,4 +74,24 @@
     display: none;
   }
 
+  #bbit-cs-what a,
+  #bbit-cs-attendeers a,
+  #bbit-cs-eventUrl a,
+  #bbit-cs-CEmail a {
+    color: #112abb;
+    text-decoration: underline;
+  }
+
+  #bbit-cs-what a:hover,
+  #bbit-cs-attendeers a:hover,
+  #bbit-cs-eventUrl a:hover,
+  #bbit-cs-CEmail a:hover,
+  .lk {
+    text-decoration: none;
+  }
+
+  #bbit-cs-what a {
+    font-weight: bold;
+  }
+
 }

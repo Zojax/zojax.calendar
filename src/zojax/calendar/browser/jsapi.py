@@ -177,7 +177,6 @@ class listCalendar(object):
             if i.attendees:
                 for member in i.attendees:
                     principal = getPrincipal(member)
-                    oneMember = {}
 
                     homeFolder = IPersonalSpace(principal, None)
                     profileUrl = homeFolder is not None \
@@ -185,7 +184,7 @@ class listCalendar(object):
 
                     members.append('<a href="%s">%s</a>'%(profileUrl, principal.title))
 
-
+            text = getattr(i.text,'cooked', '')
             ret['events'].append([
                 i.__name__,
                 i.title,
@@ -198,13 +197,13 @@ class listCalendar(object):
                 i.color,
                 1, #editable
                 i.location,
-                i.description, #10
+                i.description,
                 urllib.quote(', '.join(members)), #attends
                 i.eventUrl,
                 i.contactName,
                 i.contactEmail,
                 i.contactPhone,
-                '' #i.text
+                text #i.text
                 ])
 
         return encoder.encode(ret)

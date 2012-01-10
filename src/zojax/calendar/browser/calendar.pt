@@ -7,6 +7,7 @@
   <div>
 
     <script type="text/javascript">
+        var Calendar_URL = '<tal:block content="string: ${context/@@absolute_url}/" />';
         var CalendarAPI_URL = '<tal:block content="string: ${context/@@absolute_url}/CalendarAPI/" />';
         var CalendarAPI_readonly = <tal:block content="python: view.checkEditing() and 'false' or 'true'" />;
     </script>
@@ -150,7 +151,7 @@
                     }
                     //CEmail
                     if (data[14]) {
-                        $("#bbit-cs-CEmail").css("display", "block").html(data[14]);
+                        $("#bbit-cs-CEmail").css("display", "block").html('<a href="mailto:'+data[14]+'">'+data[14]+'</a>');
                     }
                     //CPhone
                     if (data[15]) {
@@ -162,15 +163,14 @@
                     }
 
                     var ts = $("#bbit-cs-buddle-timeshow").html(ss.join(""));
-                    $("#bbit-cs-what").html(data[1]);
-                    $("#bbit-cs-id").val(data[0]);
+                    $("#bbit-cs-what").css("display", "block").html('<a href="'+Calendar_URL+data[0]+'">'+data[1]+'</a>');
                     bud.data("cdata", data);
                     bud.css({ "visibility": "visible", left: pos.left, top: pos.top });
 
                     $(document).one("click", function() {
                         $("#bbit-cs-buddle").css("visibility", "hidden");
                     });
-                    
+
                     $("#bbit-cs-buddle").find('a').click(function () {window.open(this.href)});
                 }
                 return false;
