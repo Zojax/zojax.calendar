@@ -58,7 +58,7 @@
     <include package=".notifications" />
   </registerIn>
 
-  <include package=".browser" file="styles.zcml" />
+  <include package=".browser" file="resources.zcml" />
 
   <!-- translations -->
   <i18n:registerTranslations directory="locales"/>

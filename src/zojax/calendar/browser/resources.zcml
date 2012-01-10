@@ -9,6 +9,15 @@
      name="zojax-calendar.css"
      library="zojax"
      type="stylesheet"
-     file="styles.css" filetype="zrt" />
+     file="resources/styles.css" filetype="zrt" />
+
+  <!-- javascripts -->
+  <zojax:resource
+     name="zojax-calendar.js"
+     file="resources/calendar.js" type="zrt" />
+
+  <zojax:resource
+     name="zojax-calendar-edit.js"
+     file="resources/edit.js" type="zrt" />
 
 </configure>
