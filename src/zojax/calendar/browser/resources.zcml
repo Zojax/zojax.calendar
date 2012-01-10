@@ -20,4 +20,9 @@
      name="zojax-calendar-edit.js"
      file="resources/edit.js" type="zrt" />
 
+  <zojax:resourcedirectory
+     name="zojax.calendar-images"
+     directory="resources/images"
+     mapping=".css:zrt" />
+
 </configure>
