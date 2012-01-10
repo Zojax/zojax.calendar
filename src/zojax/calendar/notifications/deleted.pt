@@ -10,7 +10,7 @@
           <a target="_blank" href="#" style="color:#ffffff;display:block"
              tal:attributes="href string:${site/@@absolute_url}/">
             <img width="158" height="37" style="border:0;display:block" src="" alt="QuickOASIS"
-                 tal:attributes="href string:${site/@@absolute_url}/@@/zojax-resources/logo" />
+                 tal:attributes="src string:${site/@@absolute_url}/@@/zojax-resources/logo" />
           </a>
       </td></tr>
       <tr><td style="background-color:#fff;padding:25px 40px 22px;border-radius:0 0 7px 7px">
