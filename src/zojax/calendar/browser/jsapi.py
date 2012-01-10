@@ -21,7 +21,7 @@ from zojax.calendar.product import calendar as calendarModule
 from pytz import utc
 from datetime import datetime, timedelta
 from simplejson import JSONEncoder
-
+import urllib
 from zope import interface
 from zope.component import getUtility, queryMultiAdapter
 from zope.publisher.browser import BrowserView
@@ -183,9 +183,7 @@ class listCalendar(object):
                     profileUrl = homeFolder is not None \
                         and '%s/profile/'%absoluteURL(homeFolder, self.request) or ''
 
-                    oneMember["url"] = profileUrl
-                    oneMember["title"] = principal.title
-                    members.append(oneMember)
+                    members.append('<a href="%s">%s</a>'%(profileUrl, principal.title))
 
 
             ret['events'].append([
@@ -201,7 +199,7 @@ class listCalendar(object):
                 1, #editable
                 i.location,
                 i.description, #10
-                members, #attends
+                urllib.quote(', '.join(members)), #attends
                 i.eventUrl,
                 i.contactName,
                 i.contactEmail,

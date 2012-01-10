@@ -109,7 +109,6 @@
                 $.each(data, function(i, item){
                     str += "[" + i + "]: " + item + "\n";
                 });
-console.log(str);
                 if (data != null) {
                     var csbuddle = '<div id="bbit-cs-buddle" style="z-index: 180; width: 400px;visibility:hidden;" class="bubble"><table class="bubble-table" cellSpacing="0" cellPadding="0"><tbody><tr><td class="bubble-cell-side"><div id="tl1" class="bubble-corner"><div class="bubble-sprite bubble-tl"></div></div><td class="bubble-cell-main"><div class="bubble-top"></div><td class="bubble-cell-side"><div id="tr1" class="bubble-corner"><div class="bubble-sprite bubble-tr"></div></div>  <tr><td class="bubble-mid" colSpan="3"><div style="overflow: hidden" id="bubbleContent1"><div><div></div><div class="cb-root"><table class="cb-table" cellSpacing="0" cellPadding="0"><tbody><tr><td class="cb-value"><div class="textbox-fill-wrapper"><div class="textbox-fill-mid"><div id="bbit-cs-what" title="' + i18n.xgcalendar.click_to_detail + '" class="textbox-fill-div lk" style="cursor:pointer;"></div></div></div></td></tr><tr><td class=cb-value><div id="bbit-cs-buddle-timeshow"></div></td></tr><tr><td class=cb-value><div id="bbit-cs-location"></div></td></tr><tr><td class=cb-value><div id="bbit-cs-description"></div></td></tr><tr><td class=cb-value><div id="bbit-cs-attendeers"></div></td></tr><tr><td class=cb-value><div id="bbit-cs-eventUrl"></div></td></tr><tr><td class=cb-value><div id="bbit-cs-CName"></div></td></tr><tr><td class=cb-value><div id="bbit-cs-CEmail"></div></td></tr><tr><td class=cb-value><div id="bbit-cs-CPhone"></div></td></tr><tr><td class=cb-value><div id="bbit-cs-body"></div></td></tr></tbody></table> </div></div></div><tr><td><div id="bl1" class="bubble-corner"><div class="bubble-sprite bubble-bl"></div></div><td><div class="bubble-bottom"></div><td><div id="br1" class="bubble-corner"><div class="bubble-sprite bubble-br"></div></div></tr></tbody></table><div id="bubbleClose2" class="bubble-closebutton"></div><div id="prong1" class="prong"><div class=bubble-sprite></div></div></div>';
                     var bud = $("#bbit-cs-buddle");
@@ -139,12 +138,11 @@ console.log(str);
                     }
                     //attendeers
                     if (data[11]) {
-                        console.log(data[11][0]);
-                        $("#bbit-cs-attendeers").css("display", "block").html(data[11]);
+                    	$("#bbit-cs-attendeers").css("display", "block").html(decodeURIComponent(data[11]))
                     }
                     //eventUrl
                     if (data[12]) {
-                        $("#bbit-cs-eventUrl").css("display", "block").html(data[12]);
+                        $("#bbit-cs-eventUrl").css("display", "block").html('<a href="'+data[12]+'">'+data[12]+'</a>');
                     }
                     //CName
                     if (data[13]) {
@@ -172,6 +170,8 @@ console.log(str);
                     $(document).one("click", function() {
                         $("#bbit-cs-buddle").css("visibility", "hidden");
                     });
+                    
+                    $("#bbit-cs-buddle").find('a').click(function () {window.open(this.href)});
                 }
                 return false;
 
