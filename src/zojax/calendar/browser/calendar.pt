@@ -238,7 +238,9 @@
             //Add a new event
             $("#faddbtn").click(function(e) {
                 var url ="edit.html";
-                OpenModelWindow(url,{ width: 500, height: 550, caption: "Create New Calendar"});
+                OpenModelWindow(url,{ width: 500, height: 550, caption: "Create New Calendar",onclose:function(){
+                       $("#gridcontainer").reload();
+                    }});
             });
             //go to today
             $("#showtodaybtn").click(function(e) {
