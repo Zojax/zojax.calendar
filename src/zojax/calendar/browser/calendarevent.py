@@ -16,10 +16,10 @@
 $Id$
 """
 from zope.component import getUtility
+from zope.traversing.browser import absoluteURL
 
 from zojax.personal.space.interfaces import IPersonalSpace
 from zojax.authentication.utils import getPrincipal
-from zope.traversing.browser import absoluteURL
 
 
 class ClendarEventView(object):

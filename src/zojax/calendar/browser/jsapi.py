@@ -15,30 +15,29 @@
 
 $Id$
 """
-#import calendar as calendarModule
 from zojax.calendar.product import calendar as calendarModule
 
+import urllib
 from pytz import utc
 from datetime import datetime, timedelta
 from simplejson import JSONEncoder
-import urllib
+
 from zope import interface
-from zope.component import getUtility, queryMultiAdapter
-from zope.publisher.browser import BrowserView
-from zojax.catalog.interfaces import ICatalog
-from zope.publisher.interfaces import NotFound
-
 from zope.event import notify
-from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
-from zojax.resourcepackage.library import include
-
-from zojax.content.type.interfaces import IContentType
-from zojax.principal.field.utils import searchPrincipals
-from zojax.principal.profile.interfaces import IPersonalProfile
-from zojax.authentication.utils import getPrincipal
-
-from zojax.personal.space.interfaces import IPersonalSpace
+from zope.component import getUtility, queryMultiAdapter
 from zope.traversing.browser import absoluteURL
+from zope.publisher.browser import BrowserView
+from zope.publisher.interfaces import NotFound
+from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
+
+from zojax.catalog.interfaces import ICatalog
+from zojax.content.type.interfaces import IContentType
+from zojax.personal.space.interfaces import IPersonalSpace
+from zojax.principal.profile.interfaces import IPersonalProfile
+from zojax.resourcepackage.library import include
+from zojax.authentication.utils import getPrincipal
+from zojax.principal.field.utils import searchPrincipals
+
 
 class Encoder(JSONEncoder):
 

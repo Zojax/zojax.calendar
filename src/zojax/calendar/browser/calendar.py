@@ -16,10 +16,10 @@
 $Id$
 """
 from zope.component import getUtility
+from zope.security.management import checkPermission
 
 from zojax.catalog.interfaces import ICatalog
 from zojax.resourcepackage.library import include
-from zope.security.management import checkPermission
 
 
 class ClendarView(object):
