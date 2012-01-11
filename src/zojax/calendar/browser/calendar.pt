@@ -14,7 +14,7 @@
     <script tal:attributes="src string: ${context/@@absolute_url}/++resource++zojax-calendar.js"
             src="" type="text/javascript"></script>
 
-    <div>
+    <div id="calendar-workspace">
 
       <div id="calhead" style="padding-left:1px;padding-right:1px;">
             <div class="cHead"><div class="ftitle">Calendar</div>
@@ -88,5 +88,10 @@
         </div>
 
   </div>
+
+<tal:block tal:define="overview provider:columns.content|nothing">
+  <div tal:condition="overview" tal:content="structure overview"></div>
+</tal:block>
+
   </div>
 </tal:block>

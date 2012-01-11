@@ -18,6 +18,16 @@
      type="zojax.content.type.interfaces.IContentTypeType" />
 
   <registerIn registry="zojax.product.zojax-calendar">
+
+    <!-- central column portlets -->
+    <zojax:portletManager
+       name="columns.content"
+       title="Calendar content column"
+       for=".interfaces.ICalendarWorkspace"
+       schema=".interfaces.ICalendarContentPortletManager"
+       provides="zojax.content.space.portlets.interfaces.IContentPortletsManager"
+       class="zojax.portlet.manager.PortletManagerWithStatus" />
+
     <zojax:portlet
        name="portlet.events"
        title="Upcoming events"

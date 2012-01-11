@@ -94,4 +94,8 @@
     font-weight: bold;
   }
 
+  #calendar-workspace {
+    padding-bottom: 25px;
+  }
+
 }

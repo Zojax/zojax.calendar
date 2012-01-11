@@ -24,6 +24,7 @@ from zope.traversing.api import getPath
 from zope.app.component.hooks import getSite
 
 from zojax.cache.view import cache
+from zojax.cache.timekey import TimeKey, each15minutes
 from zojax.portlet.cache import PortletId, PortletModificationTag
 from zojax.catalog.interfaces import ICatalog
 
@@ -43,7 +44,7 @@ class EventsPortlet(object):
 
     events = None
 
-    @cache(PortletId(), EventsTag, PortletModificationTag, CalendarKey)
+    @cache(PortletId(), EventsTag, PortletModificationTag, CalendarKey, TimeKey(each15minutes))
     def updateAndRender(self):
         return super(EventsPortlet, self).updateAndRender()
 
@@ -52,12 +53,18 @@ class EventsPortlet(object):
 
         now = datetime.now(utc)
 
-        results = getUtility(ICatalog).searchResults(
-            searchContext = (getSite(),),
-            sort_on='calendarEventStart', sort_order='reverse',
-            typeType = {'any_of': ('Event type',)},
-            calendarEventDuration={
-                'between': (now-timedelta(3650), now, True, True)})
+        query = dict(searchContext=(getSite(),),
+                     sort_on='calendarEventStart',
+                     typeType = {'any_of': ('Event type',)},
+                     )
+
+        if self.onlyToday:
+            endDay = datetime(now.year, now.month, now.day, 23, 23, 59, 0, utc)
+            query['calendarEventDuration']={'between': (now, endDay, True, True)}
+        else:
+            query['calendarEventDuration']={'between': (now, now+timedelta(3650), True, True)}
+
+        results = getUtility(ICatalog).searchResults(**query)
 
         if results:
             self.events = results[:self.count]

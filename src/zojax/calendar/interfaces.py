@@ -26,6 +26,10 @@ from zojax.widget.list import SimpleList
 from zojax.richtext.field import RichText
 from zojax.principal.field import UserField
 
+from zojax.portlet.interfaces import _ as pMsg
+from zojax.portlet.interfaces import \
+    IPortletManagerWithStatus, ENABLED, statusVocabulary
+
 _ = MessageFactory('zojax.calendar')
 
 
@@ -90,6 +94,12 @@ class IEventsPortlet(interface.Interface):
         title = _('Visibility'),
         description = _('All events are visible to all users.'),
         default = True,
+        required = False)
+
+    onlyToday = schema.Bool(
+        title = _('Only Today Events'),
+        description = _("Display only the today events"),
+        default = False,
         required = False)
 
 
@@ -180,3 +190,18 @@ class ICalendarEvent(IEvent, IEventLocation):
         title = _(u'Recurring Rule'),
         required = False,
         default = u'0')
+
+
+class ICalendarContentPortletManager(IPortletManagerWithStatus):
+
+    portletIds = schema.Tuple(
+        title = pMsg('Portlets'),
+        value_type = schema.Choice(vocabulary = 'zojax portlets'),
+        default = ('portlet.events',),
+        required = True)
+
+    status = schema.Choice(
+        title = pMsg(u'Status'),
+        vocabulary = statusVocabulary,
+        default = ENABLED,
+        required = True)
