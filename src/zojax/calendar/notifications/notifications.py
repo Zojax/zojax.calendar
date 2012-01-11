@@ -21,6 +21,7 @@ from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.app.container.interfaces import IObjectAddedEvent, IObjectRemovedEvent
 
 from zojax.ownership.interfaces import IOwnership
+from zojax.content.type.interfaces import IDraftedContent
 from zojax.subscription.interfaces import ISubscriptionDescription,\
     SubscriptionException
 from zojax.content.notifications.utils import sendNotification
@@ -49,6 +50,9 @@ class EventNotificationDescription(object):
 @component.adapter(ICalendarEvent, IObjectAddedEvent)
 def CalendarEventAdded(object, ev):
     """ sends emails when the event is created """
+    if IDraftedContent.providedBy(object):
+        return
+
     principals = ()
     owner = IOwnership(object).owner.id
     attendees = object.attendees or None
@@ -77,6 +81,9 @@ def CalendarEventAdded(object, ev):
 @component.adapter(ICalendarEvent, IObjectModifiedEvent)
 def CalendarEventModified(object, ev):
     """ sends emails when the event is modified """
+    if IDraftedContent.providedBy(object):
+        return
+
     principals = ()
     owner = IOwnership(object).owner.id
     attendees = object.attendees or None
@@ -105,6 +112,9 @@ def CalendarEventModified(object, ev):
 @component.adapter(ICalendarEvent, IObjectRemovedEvent)
 def CalendarEventRemoved(object, ev):
     """ sends emails when the event is removed """
+    if IDraftedContent.providedBy(object):
+        return
+
     principals = ()
     owner = IOwnership(object).owner.id
     attendees = object.attendees or None
