@@ -12,13 +12,18 @@
      file="resources/styles.css" filetype="zrt" />
 
   <!-- javascripts -->
-  <zojax:resource
-     name="zojax-calendar.js"
-     file="resources/calendar.js" type="zrt" />
 
-  <zojax:resource
+  <zojax:resourceinclude
+     name="zojax-calendar.js"
+     file="resources/calendar.js"
+     require="jquery-plugins" library="zojax-calendar-js" type="javascript"
+     mapping=".css:zrt" />
+
+  <zojax:resourceinclude
      name="zojax-calendar-edit.js"
-     file="resources/edit.js" type="zrt" />
+     file="resources/edit.js"
+     require="jquery-plugins" library="zojax-calendar-edit" type="javascript"
+     mapping=".css:zrt" />
 
   <zojax:resourcedirectory
      name="zojax.calendar-images"

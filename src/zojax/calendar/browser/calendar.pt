@@ -6,14 +6,6 @@
 
   <div>
 
-    <script type="text/javascript">
-        var Calendar_URL = '<tal:block content="string: ${context/@@absolute_url}/" />';
-        var CalendarAPI_URL = '<tal:block content="string: ${context/@@absolute_url}/CalendarAPI/" />';
-        var CalendarAPI_readonly = <tal:block content="python: view.checkEditing() and 'false' or 'true'" />;
-    </script>
-    <script tal:attributes="src string: ${context/@@absolute_url}/++resource++zojax-calendar.js"
-            src="" type="text/javascript"></script>
-
     <div id="calendar-workspace">
 
       <div id="calhead" style="padding-left:1px;padding-right:1px;">

@@ -1,13 +1,6 @@
 <tal:block i18n:domain="zojax.calendar"
            define="editEvent python:view.getEvent(request.get('id', None))">
 
-    <script type="text/javascript">
-        var CalendarAPI_URL = '<tal:block content="string: ${context/@@absolute_url}/CalendarAPI/" />';
-    </script>
-    <script tal:attributes="src string: ${context/@@absolute_url}/++resource++zojax-calendar-edit.js"
-            src="" type="text/javascript"></script>
-
-
     <div>
       <div class="toolBotton">
         <a id="Savebtn" class="imgbtn" href="javascript:void(0);">

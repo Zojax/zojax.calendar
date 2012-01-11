@@ -19,7 +19,8 @@ from zope.component import getUtility
 from zope.security.management import checkPermission
 
 from zojax.catalog.interfaces import ICatalog
-from zojax.resourcepackage.library import include
+from zope.traversing.browser import absoluteURL
+from zojax.resourcepackage.library import include, includeInplaceSource
 
 
 class ClendarView(object):
@@ -27,10 +28,15 @@ class ClendarView(object):
     hasEvents = True
 
     def update(self):
-        include('jquery-wdcalendar')
-
         context = self.context
         request = self.request
+
+        calendarUrl = u'%s'%absoluteURL(context, request)
+        readonly = self.checkEditing() and 'false' or 'true'
+        includeInplaceSource(jssource%{
+                'calendarUrl': calendarUrl,
+                'readonly': readonly,
+                }, ('jquery-wdcalendar', 'zojax-calendar-js',))
 
         catalog = getUtility(ICatalog)
 
@@ -45,3 +51,9 @@ class ClendarView(object):
 
     def checkEditing(self):
         return checkPermission('zojax.contenttype.AddCalendarEvent', self.context)
+
+jssource = """<script type="text/javascript">
+        var Calendar_URL = '%(calendarUrl)s/';
+        var CalendarAPI_URL = '%(calendarUrl)s/CalendarAPI/';
+        var CalendarAPI_readonly = %(readonly)s;
+</script>"""

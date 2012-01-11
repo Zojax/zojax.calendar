@@ -34,7 +34,7 @@ from zojax.catalog.interfaces import ICatalog
 from zojax.content.type.interfaces import IContentType
 from zojax.personal.space.interfaces import IPersonalSpace
 from zojax.principal.profile.interfaces import IPersonalProfile
-from zojax.resourcepackage.library import include
+from zojax.resourcepackage.library import include, includeInplaceSource
 from zojax.authentication.utils import getPrincipal
 from zojax.principal.field.utils import searchPrincipals
 
@@ -394,8 +394,12 @@ class editCalendar(object):
     """ popup form of editing calendar event """
 
     def update(self):
-        include('jquery-wdcalendar')
         context, request = self.context, self.request
+
+        apiUrl = u'%s/CalendarAPI/'%absoluteURL(context, request)
+        includeInplaceSource(jssource%{
+                'apiUrl': apiUrl,
+                }, ('jquery-wdcalendar', 'zojax-calendar-edit',))
 
     def getEvent(self, eventId):
         context = self.context
@@ -421,3 +425,7 @@ class editCalendar(object):
             return info
 
         return
+
+jssource = """<script type="text/javascript">
+var CalendarAPI_URL = '%(apiUrl)s';
+</script>"""
