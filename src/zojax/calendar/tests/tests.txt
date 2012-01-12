@@ -40,20 +40,14 @@ Install product
 Add Event
 ---------
 
-current time
-
-    >>> from datetime import datetime, timedelta
-    >>> now = datetime.now()
-    >>> startDate = now + timedelta(hours=1)
-    >>> endDate = now + timedelta(weeks=40, hours=1)
 
     >>> actor.open("http://localhost/space/context.html")
     >>> actor.getLink('Event').click()
 
     >>> actor.getControl('Title').value = u'Test news item'
     >>> actor.getControl('Event Location').value = u'Kazakhstan, Almaty'
-    >>> actor.getControl('Event Starts').value = startDate.strftime('%Y/%m/%d %H:%M')
-    >>> actor.getControl('Event Ends').value = endDate.strftime('%Y/%m/%d %H:%M')
+    >>> actor.getControl('Event Starts').value = u'22/01/01 10:00'
+    >>> actor.getControl('Event Ends').value = u'22/10/01 10:00'
     >>> actor.getControl('Event URL').value = u'http://zojax.net/'
     >>> actor.getControl('Contact Name').value = u'Nikolay Kim'
     >>> actor.getControl('Contact E-mail').value = u'fafhrd91@gmail.com'
@@ -79,7 +73,7 @@ we need install calendar product
           <span class="z-portlet-item-details">
     		  Kazakhstan, Almaty, <br />
     <BLANKLINE>
-    	<span class="zojax-formatter-datetime" value="January 01, 2007 10:00:00 -0800" format="short" offset="-480">01/01/07 10:00 AM</span>
+    	<span class="zojax-formatter-datetime" value="January 01, 2022 10:00:00 -0800" format="short" offset="-480">01/01/22 10:00 AM</span>
           </span>
         </div>
     <BLANKLINE>
@@ -90,23 +84,27 @@ we need install calendar product
 Calendar portlet
 ----------------
 
-    >>> actor.open("http://localhost/space/calendarportlet.html?pyear=2007&amp;pmonth=01")
+    >>> actor.open("http://localhost/space/calendarportlet.html?pyear=2022&amp;pmonth=01")
     >>> print actor.contents
     <!DOCTYPE html...
     ...
     ...<div class="z-portlet portlet-calendar">
       <h2 class="z-portlet-header">
+        <a href="http://localhost/space/calendarportlet.html?pyear=2021&amp;pmonth=12"
+           rel="nofollow" title="Previous month">&laquo;</a>
+    <BLANKLINE>
         <a title="All events"
-           href="http://localhost/events.html?year=2007&amp;month=1">
-           1 2007
+           href="http://localhost/events.html?year=2022&amp;month=1">
+           1 2022
         </a>
-        <a href="http://localhost/space/calendarportlet.html?pyear=2007&amp;pmonth=2"
-           rel="nofollow" title="Next month">&raquo;</a>
+    <BLANKLINE>
+    <BLANKLINE>
       </h2>
+    <BLANKLINE>
       <div class="z-portlet-body">
         <table class="z-calendar" summary="Calendar">
           <thead>
-            <tr class="z-calendar-weekdays">
+    	<tr class="z-calendar-weekdays">
               <th scope="col">1</th>
               <th scope="col">2</th>
               <th scope="col">3</th>
@@ -114,18 +112,18 @@ Calendar portlet
               <th scope="col">5</th>
               <th scope="col">6</th>
               <th scope="col">7</th>
-            </tr>
+    	</tr>
           </thead>
     ...
-    <td class="z-calendar-events">
-        <a href="http://localhost/events.html?year=2007&amp;month=1&amp;day=1"
+    		<td class="z-calendar-events">
+    		  <a href="http://localhost/events.html?year=2022&amp;month=1&amp;day=1"
            title="Test news item">1</a>
-    </td>
+    		</td>
     ...
-    <td class="z-calendar-events">
-        <a href="http://localhost/events.html?year=2007&amp;month=1&amp;day=31"
+    		<td class="z-calendar-events">
+    		  <a href="http://localhost/events.html?year=2022&amp;month=1&amp;day=31"
            title="Test news item">31</a>
-    </td>
+    		</td>
     ...
     </html>
 
@@ -143,7 +141,8 @@ add calendar workspace
     >>> print actor.contents
     <!DOCTYPE html...
     ...
-    ...<h1>Calendar</h1>
+    ...Calendar</a>
+    ...
     <BLANKLINE>
       <div>
         No events have been created.
