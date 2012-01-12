@@ -40,13 +40,20 @@ Install product
 Add Event
 ---------
 
+current time
+
+    >>> from datetime import datetime, timedelta
+    >>> now = datetime.now()
+    >>> startDate = now + timedelta(hours=1)
+    >>> endDate = now + timedelta(weeks=40, hours=1)
+
     >>> actor.open("http://localhost/space/context.html")
     >>> actor.getLink('Event').click()
 
     >>> actor.getControl('Title').value = u'Test news item'
     >>> actor.getControl('Event Location').value = u'Kazakhstan, Almaty'
-    >>> actor.getControl('Event Starts').value = u'07/01/01 10:00'
-    >>> actor.getControl('Event Ends').value = u'07/10/01 10:00'
+    >>> actor.getControl('Event Starts').value = startDate.strftime('%Y/%m/%d %H:%M')
+    >>> actor.getControl('Event Ends').value = endDate.strftime('%Y/%m/%d %H:%M')
     >>> actor.getControl('Event URL').value = u'http://zojax.net/'
     >>> actor.getControl('Contact Name').value = u'Nikolay Kim'
     >>> actor.getControl('Contact E-mail').value = u'fafhrd91@gmail.com'
@@ -170,19 +177,19 @@ response for day
 
     >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=day&showdate=12/24/2011")
     >>> print actor.contents
-    {"start":"12/24/2011 00:00", "issort":true, "end":"12/24/2011 23:23", "events":[["sandwich-day","Sandwich Day","12/24/2011 10:00","12/24/2011 18:00","0","0","0","6","1","Russia, Yeysk",""]], "error":null}
+    {"start": "12/24/2011 00:00", "issort": true, "end": "12/24/2011 23:23", "events": [["sandwich-day", "Sandwich Day", "12/24/2011 10:00", "12/24/2011 18:00", false, 0, "0", "-1", 1, "Russia, Yeysk", "It is the day when a family is preparing sandwiches.", "", "http://zojax.com/", "Dmitry Suvorov", "suvdim@zojax.com", "1234567890", "We plan some preparing sandwiches."]], "error": null}
 
 response for week
 
     >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=week&showdate=12/24/2011")
     >>> print actor.contents
-    {"start":"12/19/2011 00:00", "issort":true, "end":"12/25/2011 23:23", "events":[["sandwich-day","Sandwich Day","12/24/2011 10:00","12/24/2011 18:00","0","0","0","6","1","Russia, Yeysk",""]], "error":null}
+    {"start": "12/19/2011 00:00", "issort": true, "end": "12/25/2011 23:23", "events": [["sandwich-day", "Sandwich Day", "12/24/2011 10:00", "12/24/2011 18:00", false, 0, "0", "-1", 1, "Russia, Yeysk", "It is the day when a family is preparing sandwiches.", "", "http://zojax.com/", "Dmitry Suvorov", "suvdim@zojax.com", "1234567890", "We plan some preparing sandwiches."]], "error": null}
 
 response for month
 
     >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=month&showdate=12/24/2011")
     >>> print actor.contents
-    {"start":"12/01/2011 00:00", "issort":true, "end":"12/31/2011 23:23", "events":[["sandwich-day","Sandwich Day","12/24/2011 10:00","12/24/2011 18:00","0","0","0","6","1","Russia, Yeysk",""]], "error":null}
+    {"start": "12/01/2011 00:00", "issort": true, "end": "12/31/2011 23:23", "events": [["sandwich-day", "Sandwich Day", "12/24/2011 10:00", "12/24/2011 18:00", false, 0, "0", "-1", 1, "Russia, Yeysk", "It is the day when a family is preparing sandwiches.", "", "http://zojax.com/", "Dmitry Suvorov", "suvdim@zojax.com", "1234567890", "We plan some preparing sandwiches."]], "error": null}
 
 
 
