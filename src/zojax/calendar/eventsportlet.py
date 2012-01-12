@@ -19,14 +19,17 @@ from pytz import utc
 from datetime import datetime, timedelta
 
 from zope import interface
-from zope.component import getUtility
+from zope.component import getUtility, queryUtility
 from zope.traversing.api import getPath
 from zope.app.component.hooks import getSite
+from zope.app.intid.interfaces import IIntIds
 
 from zojax.cache.view import cache
 from zojax.cache.timekey import TimeKey, each15minutes
 from zojax.portlet.cache import PortletId, PortletModificationTag
 from zojax.catalog.interfaces import ICatalog
+from zojax.content.space.utils import getSpace
+from zojax.principal.profile.timezone import getPrincipalTimezone
 
 from cache import EventsTag
 from interfaces import IEventsPortlet
@@ -51,12 +54,26 @@ class EventsPortlet(object):
     def update(self):
         super(EventsPortlet, self).update()
 
-        now = datetime.now(utc)
+        context, request = self.context, self.request
+
+        ids = queryUtility(IIntIds)
+        principal = request.principal
+
+        user_tz = getPrincipalTimezone(principal)
+        if user_tz:
+            now = datetime.now(utc).astimezone(user_tz)
+        else:
+            now = datetime.now(utc)
 
         query = dict(searchContext=(getSite(),),
                      sort_on='calendarEventStart',
                      typeType = {'any_of': ('Event type',)},
                      )
+
+        if self.spaceMode == 2:
+            query['contentSpace'] = {'any_of': [ids.queryId(getSpace(context))]}
+        elif self.spaceMode == 3:
+            query['traversablePath'] = {'any_of':(getSpace(context),)}
 
         if self.onlyToday:
             endDay = datetime(now.year, now.month, now.day, 23, 23, 59, 0, utc)

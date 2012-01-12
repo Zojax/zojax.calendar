@@ -23,6 +23,7 @@ from zojax.content.notifications.interfaces import IContentNotification
 from z3c.schema.baseurl import BaseURL
 from z3c.schema.email import RFC822MailAddress
 from zojax.widget.list import SimpleList
+from zojax.widget.radio.field import RadioChoice
 from zojax.richtext.field import RichText
 from zojax.principal.field import UserField
 
@@ -95,6 +96,12 @@ class IEventsPortlet(interface.Interface):
         description = _('All events are visible to all users.'),
         default = True,
         required = False)
+
+    spaceMode = RadioChoice(
+        title = _(u'Space mode'),
+        default = 3,
+        vocabulary='zojax.portlets.recent-spacemodes',
+        required = True)
 
     onlyToday = schema.Bool(
         title = _('Only Today Events'),
