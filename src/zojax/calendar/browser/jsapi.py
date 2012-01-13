@@ -56,7 +56,7 @@ def jsonable(func):
     return cal
 
 
-def js2PythonTime(day):
+def js2PythonTime(day, principal=None):
     """ converts str date to datetime """
     try:
         day = datetime.strptime(day, '%m/%d/%Y %H:%M')
@@ -65,6 +65,10 @@ def js2PythonTime(day):
             day = datetime.strptime(day, '%m/%d/%Y')
         except ValueError:
             return encoder.encode({'success': False, 'message': 'Error converting time', 'day': day})
+    # set timezone from user profile
+    user_tz = getPrincipalTimezone(principal)
+    if user_tz:
+        return user_tz.localize(day)
     return day
 
 
@@ -117,6 +121,7 @@ class addCalendar(object):
     def __call__(self):
         context, request = self.context, self.request
         container = context.context
+        principal = request.principal
 
         calendarStartTime = request.form.get('CalendarStartTime', None)
         calendarEndTime = request.form.get('CalendarEndTime', None)
@@ -127,8 +132,8 @@ class addCalendar(object):
             eventCt = getUtility(IContentType, name='calendar.event')
             event = eventCt.create(title=eventTitle)
 
-            event.startDate = js2PythonTime(calendarStartTime)
-            event.endDate = js2PythonTime(calendarEndTime)
+            event.startDate = js2PythonTime(calendarStartTime, principal)
+            event.endDate = js2PythonTime(calendarEndTime, principal)
             event.isAllDayEvent = bool(isAllDayEvent)
 
             eventCt.__bind__(container).add(event)
@@ -154,7 +159,7 @@ class listCalendar(object):
         showdate = request.form.get('showdate', datetime.now().strftime('%m/%d/%Y %H:%M'))
         viewtype = request.form.get('viewtype', 'month')
 
-        showdate = js2PythonTime(showdate)
+        showdate = js2PythonTime(showdate, principal)
 
         if viewtype == 'month':
             lastDay = calendarModule.monthrange(showdate.year, showdate.month)[1]
@@ -235,13 +240,14 @@ class updateCalendar(object):
     def __call__(self):
         context, request = self.context, self.request
         container = context.context
+        principal = request.principal
 
         calendarId = request.form.get('calendarId', None)
         calendarStartTime = request.form.get('CalendarStartTime', None)
         calendarEndTime = request.form.get('CalendarEndTime', None)
 
-        calendarStartTime = js2PythonTime(calendarStartTime)
-        calendarEndTime = js2PythonTime(calendarEndTime)
+        calendarStartTime = js2PythonTime(calendarStartTime, principal)
+        calendarEndTime = js2PythonTime(calendarEndTime, principal)
 
         event = container.get(calendarId)
 
@@ -283,14 +289,15 @@ class detailedCalendar(object):
     def __call__(self):
         context, request = self.context, self.request
         container = context.context
+        principal = request.principal
 
         stpartdate = request.form.get('stpartdate', None)
         stparttime = request.form.get('stparttime', None)
-        startDate = js2PythonTime(stpartdate + (stparttime and ' '+stparttime or ''))
+        startDate = js2PythonTime(stpartdate + (stparttime and ' '+stparttime or ''), principal)
 
         etpartdate = request.form.get('etpartdate', None)
         etparttime = request.form.get('etparttime', None)
-        endDate = js2PythonTime(etpartdate + (etparttime and ' '+etparttime or ''))
+        endDate = js2PythonTime(etpartdate + (etparttime and ' '+etparttime or ''), principal)
 
         eventId = request.form.get('id', None)
 
