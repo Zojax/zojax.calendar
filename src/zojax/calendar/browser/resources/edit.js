@@ -52,7 +52,8 @@ $(document).ready(function() {
             for (var i = 0; i < 24; i++) {
                 arrT.push({ text: StrFormat(tt, [i >= 10 ? i : "0" + i, "00"]) }, { text: StrFormat(tt, [i >= 10 ? i : "0" + i, "30"]) });
             }
-            $("#timezone").val(new Date().getTimezoneOffset()/60 * -1);
+            //$("#timezone").val(new Date().getTimezoneOffset()/60 * -1);
+            $("#timezone").val(userTimezone);
             $("#stparttime").dropdown({
                 dropheight: 200,
                 dropwidth:60,

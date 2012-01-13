@@ -18,7 +18,8 @@ $(document).ready(function() {
                 quickAddUrl: DATA_FEED_URL + "add",
                 quickUpdateUrl: DATA_FEED_URL + "update",
                 quickDeleteUrl: DATA_FEED_URL + "remove",
-                readonly: CalendarAPI_readonly
+                readonly: CalendarAPI_readonly,
+                zone: userTimezone
             };
             var $dv = $("#calhead");
             var _MH = document.documentElement.clientHeight;

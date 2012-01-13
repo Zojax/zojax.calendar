@@ -20,7 +20,10 @@ from zope.security.management import checkPermission
 
 from zojax.catalog.interfaces import ICatalog
 from zope.traversing.browser import absoluteURL
+from zojax.principal.profile.timezone import getPrincipalTimezone
 from zojax.resourcepackage.library import include, includeInplaceSource
+
+from zojax.calendar.browser.jsapi import timezoneToJs
 
 
 class ClendarView(object):
@@ -30,12 +33,20 @@ class ClendarView(object):
     def update(self):
         context = self.context
         request = self.request
+        principal = request.principal
+
+        user_tz = getPrincipalTimezone(principal)
+        if user_tz:
+            timezone = timezoneToJs(user_tz)
+        else:
+            timezone = str('new Date().getTimezoneOffset() / 60 * -1')
 
         calendarUrl = u'%s'%absoluteURL(context, request)
         readonly = self.checkEditing() and 'false' or 'true'
         includeInplaceSource(jssource%{
                 'calendarUrl': calendarUrl,
                 'readonly': readonly,
+                'timezone': timezone,
                 }, ('jquery-wdcalendar', 'zojax-calendar-js',))
 
         catalog = getUtility(ICatalog)
@@ -56,4 +67,5 @@ jssource = """<script type="text/javascript">
         var Calendar_URL = '%(calendarUrl)s/';
         var CalendarAPI_URL = '%(calendarUrl)s/CalendarAPI/';
         var CalendarAPI_readonly = %(readonly)s;
+        var userTimezone = %(timezone)s;
 </script>"""

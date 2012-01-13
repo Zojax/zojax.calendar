@@ -36,6 +36,7 @@ from zojax.personal.space.interfaces import IPersonalSpace
 from zojax.principal.profile.interfaces import IPersonalProfile
 from zojax.resourcepackage.library import include, includeInplaceSource
 from zojax.authentication.utils import getPrincipal
+from zojax.principal.profile.timezone import getPrincipalTimezone
 from zojax.principal.field.utils import searchPrincipals
 
 
@@ -66,6 +67,7 @@ def js2PythonTime(day):
             return encoder.encode({'success': False, 'message': 'Error converting time', 'day': day})
     return day
 
+
 def membersToTuple(members):
     """ converts members to tuple """
     if isinstance(members, list):
@@ -73,6 +75,20 @@ def membersToTuple(members):
     elif isinstance(members, basestring):
         return (members,)
     return ()
+
+
+def timezoneToJs(tz):
+    """ converts timezone to number for js """
+    value = datetime.now(utc).astimezone(tz)
+
+    offset = value.tzinfo.utcoffset(value)
+    if offset < timedelta():
+        ind = -1
+    else:
+        ind = 1
+    offset = ind*(abs(offset).seconds/600)*10
+
+    return offset/60
 
 
 class ICalendarAPI(interface.Interface):
@@ -129,6 +145,11 @@ class listCalendar(object):
     @jsonable
     def __call__(self):
         context, request = self.context, self.request
+        principal = request.principal
+
+        user_tz = getPrincipalTimezone(principal)
+        if not user_tz:
+            user_tz = utc
 
         showdate = request.form.get('showdate', datetime.now().strftime('%m/%d/%Y %H:%M'))
         viewtype = request.form.get('viewtype', 'month')
@@ -137,17 +158,17 @@ class listCalendar(object):
 
         if viewtype == 'month':
             lastDay = calendarModule.monthrange(showdate.year, showdate.month)[1]
-            first_date = datetime(showdate.year, showdate.month, 1, 0, 0, 0, 0, utc)
-            last_date = datetime(showdate.year, showdate.month, lastDay, 23, 23, 59, 0, utc)
+            first_date = datetime(showdate.year, showdate.month, 1, 0, 0, 0, 0, tzinfo=user_tz)
+            last_date = datetime(showdate.year, showdate.month, lastDay, 23, 23, 59, 0, tzinfo=user_tz)
 
         if viewtype == 'week':
             firstWeekDay = showdate.day - calendarModule.weekday(showdate.year, showdate.month, showdate.day)
-            first_date = datetime(showdate.year, showdate.month, firstWeekDay, 0, 0, 0, 0, utc)
-            last_date = datetime(showdate.year, showdate.month, firstWeekDay, 23, 23, 59, 0, utc) + timedelta(days=6)
+            first_date = datetime(showdate.year, showdate.month, firstWeekDay, 0, 0, 0, 0, tzinfo=user_tz)
+            last_date = datetime(showdate.year, showdate.month, firstWeekDay, 23, 23, 59, 0, tzinfo=user_tz) + timedelta(days=6)
 
         if viewtype == 'day':
-            first_date = datetime(showdate.year, showdate.month, showdate.day, 0, 0, 0, 0, utc)
-            last_date = datetime(showdate.year, showdate.month, showdate.day, 23, 23, 59, 0, utc)
+            first_date = datetime(showdate.year, showdate.month, showdate.day, 0, 0, 0, 0, tzinfo=user_tz)
+            last_date = datetime(showdate.year, showdate.month, showdate.day, 23, 23, 59, 0, tzinfo=user_tz)
 
         return self.listCalendarByRange(first_date, last_date)
 
@@ -395,10 +416,18 @@ class editCalendar(object):
 
     def update(self):
         context, request = self.context, self.request
+        principal = request.principal
+
+        user_tz = getPrincipalTimezone(principal)
+        if user_tz:
+            timezone = timezoneToJs(user_tz)
+        else:
+            timezone = str('new Date().getTimezoneOffset() / 60 * -1')
 
         apiUrl = u'%s/CalendarAPI/'%absoluteURL(context, request)
         includeInplaceSource(jssource%{
                 'apiUrl': apiUrl,
+                'timezone': timezone,
                 }, ('jquery-wdcalendar', 'zojax-calendar-edit',))
 
     def getEvent(self, eventId):
@@ -427,5 +456,6 @@ class editCalendar(object):
         return
 
 jssource = """<script type="text/javascript">
-var CalendarAPI_URL = '%(apiUrl)s';
+        var CalendarAPI_URL = '%(apiUrl)s';
+        var userTimezone = %(timezone)s;
 </script>"""
