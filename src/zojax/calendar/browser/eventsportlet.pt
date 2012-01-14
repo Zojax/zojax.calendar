@@ -6,10 +6,13 @@
       <a tal:attributes="href string:${item/@@absolute_url}/;
 			 title item/description" tal:content="item/title"></a>
       <span class="z-portlet-item-details">
-	    <tal:condition condition="item/location|nothing">
-	      <tal:location content="item/location">Location</tal:location>, <br />
-	    </tal:condition>
-	    <tal:date tal:content="structure formatter:dateTime,short:item/startDate" />
+        <tal:condition condition="item/location|nothing">
+          <tal:location content="item/location">Location</tal:location>, <br />
+        </tal:condition>
+        <tal:comments replace="nothing">
+          <tal:date tal:content="structure formatter:dateTime,short:item/startDate" /><br />
+        </tal:comments>
+        <tal:date tal:content="python: item.startDate.strftime('%e %b %Y, %H:%M')" />
       </span>
     </div>
     <div class="z-portlet-footer" tal:condition="nothing">

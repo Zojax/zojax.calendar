@@ -59,11 +59,14 @@ class EventsPortlet(object):
         ids = queryUtility(IIntIds)
         principal = request.principal
 
+        now = datetime.now(utc)
+        endDay = now+timedelta(3650)
+
+        # set timezone from user profile
         user_tz = getPrincipalTimezone(principal)
         if user_tz:
-            now = datetime.now(utc).astimezone(user_tz)
-        else:
-            now = datetime.now(utc)
+            now = now.astimezone(user_tz)
+            endDay = endDay.astimezone(user_tz)
 
         query = dict(searchContext=(getSite(),),
                      sort_on='calendarEventStart',
@@ -76,11 +79,11 @@ class EventsPortlet(object):
             query['traversablePath'] = {'any_of':(getSpace(context),)}
 
         if self.onlyToday:
-            endDay = datetime(now.year, now.month, now.day, 23, 23, 59, 0, utc)
-            query['calendarEventDuration']={'between': (now, endDay, True, True)}
-        else:
-            query['calendarEventDuration']={'between': (now, now+timedelta(3650), True, True)}
+            tz = user_tz and user_tz or utc
+            endDay = datetime(now.year, now.month, now.day, 23, 59, 59, 0)
+            endDay = tz.localize(endDay)
 
+        query['calendarEventDuration']={'between': (now, endDay, True, True)}
         results = getUtility(ICatalog).searchResults(**query)
 
         if results:
