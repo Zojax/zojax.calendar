@@ -15,12 +15,14 @@
 
 $Id$
 """
+from pytz import timezone
+
 from zope.component import getUtility
 from zope.security.management import checkPermission
 
 from zojax.catalog.interfaces import ICatalog
 from zope.traversing.browser import absoluteURL
-from zojax.principal.profile.timezone import getPrincipalTimezone
+from zojax.formatter.interfaces import IFormatterConfiglet
 from zojax.resourcepackage.library import include, includeInplaceSource
 
 from zojax.calendar.browser.jsapi import timezoneToJs
@@ -33,20 +35,21 @@ class ClendarView(object):
     def update(self):
         context = self.context
         request = self.request
-        principal = request.principal
 
-        user_tz = getPrincipalTimezone(principal)
-        if user_tz:
-            timezone = timezoneToJs(user_tz)
+        configlet = getUtility(IFormatterConfiglet)
+        tz = timezone(configlet.timezone)
+        if tz:
+            # difference between timezone in user's browser and formatter settings
+            timeZone = '(new Date().getTimezoneOffset() / 60 * -1) - %s'%timezoneToJs(tz)
         else:
-            timezone = str('new Date().getTimezoneOffset() / 60 * -1')
+            timeZone = str('new Date().getTimezoneOffset() / 60 * -1')
 
         calendarUrl = u'%s'%absoluteURL(context, request)
         readonly = self.checkEditing() and 'false' or 'true'
         includeInplaceSource(jssource%{
                 'calendarUrl': calendarUrl,
                 'readonly': readonly,
-                'timezone': timezone,
+                'timezone': timeZone,
                 }, ('jquery-wdcalendar', 'zojax-calendar-js',))
 
         catalog = getUtility(ICatalog)

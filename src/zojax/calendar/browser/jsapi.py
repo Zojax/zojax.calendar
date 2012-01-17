@@ -18,7 +18,7 @@ $Id$
 from zojax.calendar.product import calendar as calendarModule
 
 import urllib
-from pytz import utc
+from pytz import utc, timezone
 from datetime import datetime, timedelta
 from simplejson import JSONEncoder
 
@@ -32,6 +32,7 @@ from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 
 from zojax.catalog.interfaces import ICatalog
 from zojax.content.type.interfaces import IContentType
+from zojax.formatter.interfaces import IFormatterConfiglet
 from zojax.personal.space.interfaces import IPersonalSpace
 from zojax.principal.profile.interfaces import IPersonalProfile
 from zojax.resourcepackage.library import include, includeInplaceSource
@@ -56,20 +57,29 @@ def jsonable(func):
     return cal
 
 
-def js2PythonTime(day, principal=None):
+def js2PythonTime(value, diffHours=None):
     """ converts str date to datetime """
     try:
-        day = datetime.strptime(day, '%m/%d/%Y %H:%M')
+        value = datetime.strptime(value, '%m/%d/%Y %H:%M')
     except ValueError:
         try:
-            day = datetime.strptime(day, '%m/%d/%Y')
+            value = datetime.strptime(value, '%m/%d/%Y')
         except ValueError:
-            return encoder.encode({'success': False, 'message': 'Error converting time', 'day': day})
-    # set timezone from user profile
-    user_tz = getPrincipalTimezone(principal)
-    if user_tz:
-        return user_tz.localize(day)
-    return day
+            return encoder.encode({'success': False, 'message': 'Error converting time', 'value': value})
+
+    # set timezone from settings
+    configlet = getUtility(IFormatterConfiglet)
+    tz = timezone(configlet.timezone)
+    if value.tzinfo is None:
+        value = datetime(value.year, value.month, value.day, value.hour,
+                         value.minute, value.second, value.microsecond, tz)
+
+    value = value.astimezone(tz)
+
+    if diffHours:
+        value = value - timedelta(hours=int(diffHours))
+
+    return value
 
 
 def membersToTuple(members):
@@ -121,19 +131,19 @@ class addCalendar(object):
     def __call__(self):
         context, request = self.context, self.request
         container = context.context
-        principal = request.principal
 
         calendarStartTime = request.form.get('CalendarStartTime', None)
         calendarEndTime = request.form.get('CalendarEndTime', None)
         eventTitle = request.form.get('CalendarTitle', None)
         isAllDayEvent = request.form.get('IsAllDayEvent', None)
+        diffHours = request.form.get('timezone', None)
 
         try:
             eventCt = getUtility(IContentType, name='calendar.event')
             event = eventCt.create(title=eventTitle)
 
-            event.startDate = js2PythonTime(calendarStartTime, principal)
-            event.endDate = js2PythonTime(calendarEndTime, principal)
+            event.startDate = js2PythonTime(calendarStartTime, diffHours=diffHours)
+            event.endDate = js2PythonTime(calendarEndTime, diffHours=diffHours)
             event.isAllDayEvent = bool(isAllDayEvent)
 
             eventCt.__bind__(container).add(event)
@@ -147,33 +157,35 @@ class addCalendar(object):
 
 class listCalendar(object):
 
+    diffHours = None
+
     @jsonable
     def __call__(self):
         context, request = self.context, self.request
-        principal = request.principal
 
-        user_tz = getPrincipalTimezone(principal)
-        if not user_tz:
-            user_tz = utc
+        # set timezone from settings
+        configlet = getUtility(IFormatterConfiglet)
+        tz = timezone(configlet.timezone)
 
         showdate = request.form.get('showdate', datetime.now().strftime('%m/%d/%Y %H:%M'))
         viewtype = request.form.get('viewtype', 'month')
+        self.diffHours = request.form.get('timezone', None)
 
-        showdate = js2PythonTime(showdate, principal)
+        showdate = js2PythonTime(showdate)
 
         if viewtype == 'month':
             lastDay = calendarModule.monthrange(showdate.year, showdate.month)[1]
-            first_date = datetime(showdate.year, showdate.month, 1, 0, 0, 0, 0, tzinfo=user_tz)
-            last_date = datetime(showdate.year, showdate.month, lastDay, 23, 23, 59, 0, tzinfo=user_tz)
+            first_date = datetime(showdate.year, showdate.month, 1, 0, 0, 0, 0, tzinfo=tz)
+            last_date = datetime(showdate.year, showdate.month, lastDay, 23, 23, 59, 0, tzinfo=tz)
 
         if viewtype == 'week':
             firstWeekDay = showdate.day - calendarModule.weekday(showdate.year, showdate.month, showdate.day)
-            first_date = datetime(showdate.year, showdate.month, firstWeekDay, 0, 0, 0, 0, tzinfo=user_tz)
-            last_date = datetime(showdate.year, showdate.month, firstWeekDay, 23, 23, 59, 0, tzinfo=user_tz) + timedelta(days=6)
+            first_date = datetime(showdate.year, showdate.month, firstWeekDay, 0, 0, 0, 0, tzinfo=tz)
+            last_date = datetime(showdate.year, showdate.month, firstWeekDay, 23, 23, 59, 0, tzinfo=tz) + timedelta(days=6)
 
         if viewtype == 'day':
-            first_date = datetime(showdate.year, showdate.month, showdate.day, 0, 0, 0, 0, tzinfo=user_tz)
-            last_date = datetime(showdate.year, showdate.month, showdate.day, 23, 23, 59, 0, tzinfo=user_tz)
+            first_date = datetime(showdate.year, showdate.month, showdate.day, 0, 0, 0, 0, tzinfo=tz)
+            last_date = datetime(showdate.year, showdate.month, showdate.day, 23, 23, 59, 0, tzinfo=tz)
 
         return self.listCalendarByRange(first_date, last_date)
 
@@ -187,6 +199,10 @@ class listCalendar(object):
         ret["start"] = first_date.strftime('%m/%d/%Y %H:%M')
         ret["end"] = last_date.strftime('%m/%d/%Y %H:%M')
         ret['error'] = None
+
+        if self.diffHours:
+            first_date = first_date - timedelta(hours=int(self.diffHours))
+            last_date = last_date - timedelta(hours=int(self.diffHours))
 
         # select events from calendar within range:
         results = catalog.searchResults(
@@ -210,11 +226,18 @@ class listCalendar(object):
                     members.append('<a href="%s">%s</a>'%(profileUrl, principal.title))
 
             text = getattr(i.text,'cooked', '')
+            startDate = i.startDate
+            endDate = i.endDate
+
+            if self.diffHours:
+                startDate = startDate + timedelta(hours=int(self.diffHours))
+                endDate = endDate + timedelta(hours=int(self.diffHours))
+
             ret['events'].append([
                 i.__name__,
                 i.title,
-                i.startDate.strftime('%m/%d/%Y %H:%M'),
-                i.endDate.strftime('%m/%d/%Y %H:%M'),
+                startDate.strftime('%m/%d/%Y %H:%M'),
+                endDate.strftime('%m/%d/%Y %H:%M'),
                 i.isAllDayEvent,
                 0, #more than one day event
                    #InstanceType,
@@ -240,14 +263,14 @@ class updateCalendar(object):
     def __call__(self):
         context, request = self.context, self.request
         container = context.context
-        principal = request.principal
 
         calendarId = request.form.get('calendarId', None)
         calendarStartTime = request.form.get('CalendarStartTime', None)
         calendarEndTime = request.form.get('CalendarEndTime', None)
+        diffHours = request.form.get('timezone', None)
 
-        calendarStartTime = js2PythonTime(calendarStartTime, principal)
-        calendarEndTime = js2PythonTime(calendarEndTime, principal)
+        calendarStartTime = js2PythonTime(calendarStartTime, diffHours=diffHours)
+        calendarEndTime = js2PythonTime(calendarEndTime, diffHours=diffHours)
 
         event = container.get(calendarId)
 
@@ -289,15 +312,16 @@ class detailedCalendar(object):
     def __call__(self):
         context, request = self.context, self.request
         container = context.context
-        principal = request.principal
+
+        diffHours = request.form.get('timezone', None)
 
         stpartdate = request.form.get('stpartdate', None)
         stparttime = request.form.get('stparttime', None)
-        startDate = js2PythonTime(stpartdate + (stparttime and ' '+stparttime or ''), principal)
+        startDate = js2PythonTime(stpartdate + (stparttime and ' '+stparttime or ''), diffHours=diffHours)
 
         etpartdate = request.form.get('etpartdate', None)
         etparttime = request.form.get('etparttime', None)
-        endDate = js2PythonTime(etpartdate + (etparttime and ' '+etparttime or ''), principal)
+        endDate = js2PythonTime(etpartdate + (etparttime and ' '+etparttime or ''), diffHours=diffHours)
 
         eventId = request.form.get('id', None)
 
@@ -343,7 +367,7 @@ class detailedCalendar(object):
                 event.location = location
                 event.isAllDayEvent = bool(isAllDayEvent)
                 event.color = colorvalue
-                # ToDo: timezone ???
+
                 event.attendees = membersToTuple(attendees)
                 event.eventUrl = bool(eventUrl) and eventUrl or None
                 event.contactName = contactName
@@ -378,7 +402,7 @@ class detailedCalendar(object):
             event.location = location
             event.isAllDayEvent = bool(isAllDayEvent)
             event.color = colorvalue
-            # ToDo: timezone ???
+
             event.attendees = membersToTuple(attendees)
             event.eventUrl = bool(eventUrl) and eventUrl or None
             event.contactName = contactName
@@ -423,25 +447,28 @@ class editCalendar(object):
 
     def update(self):
         context, request = self.context, self.request
-        principal = request.principal
 
-        user_tz = getPrincipalTimezone(principal)
-        if user_tz:
-            timezone = timezoneToJs(user_tz)
+        configlet = getUtility(IFormatterConfiglet)
+        tz = timezone(configlet.timezone)
+        if tz:
+            # difference between timezone in user's browser and formatter settings
+            timeZone = '(new Date().getTimezoneOffset() / 60 * -1) - %s'%timezoneToJs(tz)
         else:
-            timezone = str('new Date().getTimezoneOffset() / 60 * -1')
+            timeZone = str('new Date().getTimezoneOffset() / 60 * -1')
 
         apiUrl = u'%s/CalendarAPI/'%absoluteURL(context, request)
         includeInplaceSource(jssource%{
                 'apiUrl': apiUrl,
-                'timezone': timezone,
+                'timezone': timeZone,
                 }, ('jquery-wdcalendar', 'zojax-calendar-edit',))
 
-    def getEvent(self, eventId):
+    def getEvent(self, eventId, diffHours):
         context = self.context
 
         if eventId and eventId in context:
             event = context[eventId]
+            startDate = event.startDate
+            endDate = event.endDate
 
             members = []
             for memeber in event.attendees:
@@ -451,12 +478,16 @@ class editCalendar(object):
                 oneMember["value"] = principal.title
                 members.append(oneMember)
 
+            if diffHours:
+                startDate = startDate + timedelta(hours=int(diffHours))
+                endDate = endDate + timedelta(hours=int(diffHours))
+
             info = {
                 'event': event,
-                'sdDate': event.startDate.strftime('%m/%d/%Y'),
-                'sdTime': event.startDate.strftime('%H:%M'),
-                'edDate': event.endDate.strftime('%m/%d/%Y'),
-                'edTime': event.endDate.strftime('%H:%M'),
+                'sdDate': startDate.strftime('%m/%d/%Y'),
+                'sdTime': startDate.strftime('%H:%M'),
+                'edDate': endDate.strftime('%m/%d/%Y'),
+                'edTime': endDate.strftime('%H:%M'),
                 'members': members}
             return info
 

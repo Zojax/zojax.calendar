@@ -81,6 +81,9 @@ $(document).ready(function() {
             function Edit(data)
             {
                var eurl="edit.html?id={0}&start={2}&end={3}&isallday={4}&title={1}";
+               if (userTimezone) {
+                 eurl = eurl + '&timezone=' + userTimezone;
+               }
                 if(data)
                 {
                     var url = StrFormat(eurl,data);

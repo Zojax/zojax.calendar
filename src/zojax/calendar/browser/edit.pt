@@ -1,5 +1,5 @@
 <tal:block i18n:domain="zojax.calendar"
-           define="editEvent python:view.getEvent(request.get('id', None))">
+           define="editEvent python:view.getEvent(request.get('id', None), request.get('timezone', None));">
 
     <div>
       <div class="toolBotton">
