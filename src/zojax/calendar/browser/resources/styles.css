@@ -98,4 +98,9 @@
     padding-bottom: 25px;
   }
 
+  input.textbox-fill-input,
+  input#bbit-cal-quickAddBTN {
+    visibility: inherit;
+  }
+
 }
