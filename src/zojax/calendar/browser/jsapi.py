@@ -134,7 +134,7 @@ class addCalendar(object):
 
         calendarStartTime = request.form.get('CalendarStartTime', None)
         calendarEndTime = request.form.get('CalendarEndTime', None)
-        eventTitle = request.form.get('CalendarTitle', None)
+        eventTitle = request.form.get('CalendarTitle', None).strip()
         isAllDayEvent = request.form.get('IsAllDayEvent', None)
         diffHours = request.form.get('timezone', None)
 
@@ -326,19 +326,19 @@ class detailedCalendar(object):
 
         eventId = request.form.get('id', None)
 
-        subject = request.form.get('Subject', None)
+        subject = request.form.get('Subject', None).strip()
         isAllDayEvent = request.form.get('IsAllDayEvent', None)
-        description = request.form.get('Description', None)
-        location = request.form.get('Location', None)
+        description = request.form.get('Description', None).strip()
+        location = request.form.get('Location', None).strip()
         colorvalue = request.form.get('colorvalue', None)
         timezone = request.form.get('timezone', None)
 
         attendees = request.form.get('attendees', None)
-        eventUrl = request.form.get('eventUrl', None)
-        contactName = request.form.get('contactName', None)
-        contactEmail = request.form.get('contactEmail', None)
-        contactPhone = request.form.get('contactPhone', None)
-        text = request.form.get('text', None)
+        eventUrl = request.form.get('eventUrl', None).strip()
+        contactName = request.form.get('contactName', None).strip()
+        contactEmail = request.form.get('contactEmail', None).strip()
+        contactPhone = request.form.get('contactPhone', None).strip()
+        text = request.form.get('text', None).strip()
 
         if eventId:
             ret = self.updateDetailedCalendar(eventId, startDate, endDate, \
