@@ -179,9 +179,10 @@ class listCalendar(object):
             last_date = datetime(showdate.year, showdate.month, lastDay, 23, 23, 59, 0, tzinfo=tz)
 
         if viewtype == 'week':
-            firstWeekDay = showdate.day - calendarModule.weekday(showdate.year, showdate.month, showdate.day)
-            first_date = datetime(showdate.year, showdate.month, firstWeekDay, 0, 0, 0, 0, tzinfo=tz)
-            last_date = datetime(showdate.year, showdate.month, firstWeekDay, 23, 23, 59, 0, tzinfo=tz) + timedelta(days=6)
+            currentWeekDay = calendarModule.weekday(showdate.year, showdate.month, showdate.day)
+            firstWeekDay = showdate - timedelta(days=currentWeekDay)
+            first_date = datetime(firstWeekDay.year, firstWeekDay.month, firstWeekDay.day, 0, 0, 0, 0, tzinfo=tz)
+            last_date = datetime(firstWeekDay.year, firstWeekDay.month, firstWeekDay.day, 23, 23, 59, 0, tzinfo=tz) + timedelta(days=6)
 
         if viewtype == 'day':
             first_date = datetime(showdate.year, showdate.month, showdate.day, 0, 0, 0, 0, tzinfo=tz)
