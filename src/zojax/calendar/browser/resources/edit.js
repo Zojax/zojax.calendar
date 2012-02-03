@@ -143,6 +143,11 @@ $(document).ready(function() {
                 if (value.length == 0) { return true; }
                 return this.optional(element) || /^(http:\/\/|https:\/\/).+(\/)$/.test(value);
             }, "Invalid URL format, start with http:// and end with / ");
+            $.validator.addMethod("compareDates", function(value, element) {
+                var startDate = $('#stpartdate').val() + ' ' + $('#stparttime').val();
+                var endDate = $('#etpartdate').val() + ' ' + $('#etparttime').val();
+                return Date.parse(startDate) <= Date.parse(endDate) || value == "";
+            }, "End date should be later than start date");
             $("#fmEdit").validate({
                 submitHandler: function(form) { $("#fmEdit").ajaxSubmit(options); },
                 errorElement: "div",
@@ -154,7 +159,8 @@ $(document).ready(function() {
             function showerror(error, target) {
                 var pos = target.position();
                 var height = target.height();
-                var newpos = { left: pos.left, top: pos.top + height + 2 }
+                //var newpos = { left: pos.left, top: pos.top + height + 2 }
+                var newpos = { left: pos.left, top: pos.top - height - 2 };
                 var form = $("#fmEdit");
                 error.appendTo(form).css(newpos);
             }
