@@ -85,7 +85,10 @@ def js2PythonTime(value, diffHours=None):
 def membersToTuple(members):
     """ converts members to tuple """
     if isinstance(members, list):
-        return tuple( members )
+        # olny uniq members
+        seen = set()
+        uniqMembers = [x for x in members if x not in seen and not seen.add(x)]
+        return tuple( uniqMembers )
     elif isinstance(members, basestring):
         return (members,)
     return ()
