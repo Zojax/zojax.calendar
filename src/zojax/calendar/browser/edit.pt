@@ -1,5 +1,9 @@
 <tal:block i18n:domain="zojax.calendar"
-           define="editEvent python:view.getEvent(request.get('id', None), request.get('timezone', None));">
+           define="editEvent python:view.getEvent(request.get('id', None), request.get('timezone', None));
+                   requestTitle python:request.get('title', None);
+                   requestStart python:view.splitDateTime(request.get('start', None));
+                   requestEnd python:view.splitDateTime(request.get('end', None));
+                   requestIsallday python:request.get('isallday', None);">
 
     <div>
       <div class="toolBotton">
@@ -22,26 +26,53 @@
             <span>*Title:</span>
             <div id="calendarcolor"> </div>
             <input MaxLength="200" class="required safe" id="Subject" name="Subject" style="width:85%;" type="text" value=""
-	               tal:attributes="value editEvent/event/title|nothing" />
+                   tal:condition="requestTitle"
+                   tal:attributes="value requestTitle" />
+            <input MaxLength="200" class="required safe" id="Subject" name="Subject" style="width:85%;" type="text" value=""
+                   tal:condition="not: requestTitle"
+                   tal:attributes="value editEvent/event/title|nothing" />
             <input id="colorvalue" name="colorvalue" type="hidden" value=""
 	               tal:attributes="value editEvent/event/color|nothing" />
           </label>
           <label>
             <span>*Time:</span>
             <div>
-              <input MaxLength="10" class="required date" id="stpartdate" name="stpartdate" style="padding-left:2px;width:90px;" type="text" value=""
-	                 tal:attributes="value editEvent/sdDate|nothing" />
-              <input MaxLength="5" class="required time" id="stparttime" name="stparttime" style="width:40px;" type="text" value=""
-	                 tal:attributes="value editEvent/sdTime|nothing" />To
-              <input MaxLength="10" class="required date compareDates" id="etpartdate" name="etpartdate" style="padding-left:2px;width:90px;" type="text" value=""
-	                 tal:attributes="value editEvent/edDate|nothing" />
-              <input MaxLength="50" class="required time" id="etparttime" name="etparttime" style="width:40px;" type="text" value=""
-	                 tal:attributes="value editEvent/edTime|nothing" />
-              <label class="checkp"
-                     tal:define="isAllDayEvent editEvent/event/isAllDayEvent|nothing">
+              <tal:block condition="requestStart">
+                <input MaxLength="10" class="required date" id="stpartdate" name="stpartdate" style="padding-left:2px;width:90px;" type="text" value=""
+                       tal:attributes="value python: requestStart[0]" />
+                <input MaxLength="5" class="required time" id="stparttime" name="stparttime" style="width:40px;" type="text" value=""
+                       tal:attributes="value python: requestStart[1]" />
+              </tal:block>
+              <tal:block condition="not: requestStart">
+                <input MaxLength="10" class="required date" id="stpartdate" name="stpartdate" style="padding-left:2px;width:90px;" type="text" value=""
+                       tal:attributes="value editEvent/sdDate|nothing" />
+                <input MaxLength="5" class="required time" id="stparttime" name="stparttime" style="width:40px;" type="text" value=""
+                       tal:attributes="value editEvent/sdTime|nothing" />
+              </tal:block>
+	          To
+              <tal:block condition="requestEnd">
+                <input MaxLength="10" class="required date compareDates" id="etpartdate" name="etpartdate" style="padding-left:2px;width:90px;" type="text" value=""
+                       tal:attributes="value python: requestEnd[0]" />
+                <input MaxLength="50" class="required time" id="etparttime" name="etparttime" style="width:40px;" type="text" value=""
+                       tal:attributes="value python: requestEnd[1]" />
+              </tal:block>
+              <tal:block condition="not: requestEnd">
+                <input MaxLength="10" class="required date compareDates" id="etpartdate" name="etpartdate" style="padding-left:2px;width:90px;" type="text" value=""
+                       tal:attributes="value editEvent/edDate|nothing" />
+                <input MaxLength="50" class="required time" id="etparttime" name="etparttime" style="width:40px;" type="text" value=""
+                       tal:attributes="value editEvent/edTime|nothing" />
+              </tal:block>
+              <label class="checkp">
                 <input id="IsAllDayEvent" name="IsAllDayEvent" type="checkbox" value="1"
-	                   tal:attributes="value isAllDayEvent;
-	                                   checked python:isAllDayEvent and 'checked' or None;" /> All Day Event
+                       tal:condition="python: requestIsallday and requestIsallday != 'NaN'"
+                       tal:attributes="value requestIsallday;
+	                                   checked python:requestIsallday and 'checked' or None;" />
+                <input id="IsAllDayEvent" name="IsAllDayEvent" type="checkbox" value="1"
+                       tal:condition="python: not requestIsallday or requestIsallday == 'NaN'"
+                       tal:define="isAllDayEvent editEvent/event/isAllDayEvent|nothing"
+                       tal:attributes="value isAllDayEvent;
+	                                   checked python:isAllDayEvent and 'checked' or None;" />
+	             All Day Event
               </label>
             </div>
           </label>

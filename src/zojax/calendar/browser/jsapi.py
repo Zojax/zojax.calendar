@@ -497,6 +497,14 @@ class editCalendar(object):
 
         return
 
+    def splitDateTime(self, value):
+        """ returns array with date and time """
+        if not value or value == '-240':
+            return
+
+        value = value.split()
+        return value
+
 jssource = """<script type="text/javascript">
         var CalendarAPI_URL = '%(apiUrl)s';
         var userTimezone = %(timezone)s;
