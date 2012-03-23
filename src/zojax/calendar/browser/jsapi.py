@@ -499,7 +499,7 @@ class editCalendar(object):
 
     def splitDateTime(self, value):
         """ returns array with date and time """
-        if not value or value == '-240':
+        if not value or not " " in value:
             return
 
         value = value.split()
