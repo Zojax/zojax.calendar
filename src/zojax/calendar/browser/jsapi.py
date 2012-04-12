@@ -151,7 +151,7 @@ class addCalendar(object):
 
             eventCt.__bind__(container).add(event)
 
-            msg = {'IsSuccess': True, 'Msg': 'Succefully'}
+            msg = {'IsSuccess': True, 'Msg': 'Created Successfully'}
         except Exception, e:
             msg = {'IsSuccess': False, 'Msg': 'Event is not created: %s'%e}
 
@@ -286,7 +286,7 @@ class updateCalendar(object):
 
         notify(ObjectModifiedEvent(event))
 
-        return encoder.encode({'IsSuccess': True, 'Msg': 'Succefully'})
+        return encoder.encode({'IsSuccess': True, 'Msg': 'Updated Successfully'})
 
 
 class removeCalendar(object):
@@ -303,7 +303,7 @@ class removeCalendar(object):
 
         try:
             del container[calendarId]
-            msg = {'IsSuccess': True, 'Msg': 'Succefully'}
+            msg = {'IsSuccess': True, 'Msg': 'Removed Successfully'}
         except KeyError, e:
             msg = {'IsSuccess': False, 'Msg': 'Event is not removed: %s'%e}
 
@@ -381,7 +381,7 @@ class detailedCalendar(object):
 
                 notify(ObjectModifiedEvent(event))
 
-                msg = {'IsSuccess': True, 'Msg': 'Succefully', 'Data': eventId}
+                msg = {'IsSuccess': True, 'Msg': 'Updated Successfully', 'Data': eventId}
             except Exception, e:
                 msg = {'IsSuccess': False, 'Msg': 'Event is not update: %s'%e}
         else:
@@ -416,7 +416,7 @@ class detailedCalendar(object):
 
             eventCt.__bind__(container).add(event)
 
-            msg = {'IsSuccess': True, 'Msg': 'Succefully', 'Data': ''}
+            msg = {'IsSuccess': True, 'Msg': 'Created Successfully', 'Data': ''}
         except Exception, e:
             msg = {'IsSuccess': False, 'Msg': 'Event is not created: %s'%e}
 
