@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-            var view="week";
+            var view="month";
             var DATA_FEED_URL = CalendarAPI_URL;
             var op = {
                 view: view,
