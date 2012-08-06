@@ -47,7 +47,7 @@ class EventsPortlet(object):
 
     events = None
 
-    @cache(PortletId(), EventsTag, PortletModificationTag, CalendarKey, TimeKey(each15minutes))
+    @cache(PortletId(), EventsTag, PortletModificationTag, CalendarKey, TimeKey(minutes=each15minutes))
     def updateAndRender(self):
         return super(EventsPortlet, self).updateAndRender()
 
