@@ -46,8 +46,8 @@ Add Event
 
     >>> actor.getControl('Title').value = u'Test news item'
     >>> actor.getControl('Event Location').value = u'Kazakhstan, Almaty'
-    >>> actor.getControl('Event Starts').value = u'22/01/01 10:00'
-    >>> actor.getControl('Event Ends').value = u'22/10/01 10:00'
+    >>> actor.getControl('Event Starts').value = '01/01/22 10:00 AM'
+    >>> actor.getControl('Event Ends').value = '01/10/22 10:00 AM'
     >>> actor.getControl('Event URL').value = u'http://zojax.net/'
     >>> actor.getControl('Contact Name').value = u'Nikolay Kim'
     >>> actor.getControl('Contact E-mail').value = u'fafhrd91@gmail.com'
@@ -81,6 +81,7 @@ we need install calendar product
     ...
     </html>
 
+
 Calendar portlet
 ----------------
 
@@ -95,7 +96,7 @@ Calendar portlet
     <BLANKLINE>
         <a title="All events"
            href="http://localhost/events.html?year=2022&amp;month=1">
-           1 2022
+           January 2022
         </a>
     <BLANKLINE>
     <BLANKLINE>
@@ -105,13 +106,13 @@ Calendar portlet
         <table class="z-calendar" summary="Calendar">
           <thead>
     	<tr class="z-calendar-weekdays">
-              <th scope="col">1</th>
-              <th scope="col">2</th>
-              <th scope="col">3</th>
-              <th scope="col">4</th>
-              <th scope="col">5</th>
-              <th scope="col">6</th>
-              <th scope="col">7</th>
+              <th scope="col">Sun</th>
+              <th scope="col">Mon</th>
+              <th scope="col">Tue</th>
+              <th scope="col">Wed</th>
+              <th scope="col">Thu</th>
+              <th scope="col">Fri</th>
+              <th scope="col">Sat</th>
     	</tr>
           </thead>
     ...
@@ -120,12 +121,10 @@ Calendar portlet
            title="Test news item">1</a>
     		</td>
     ...
-    		<td class="z-calendar-events">
-    		  <a href="http://localhost/events.html?year=2022&amp;month=1&amp;day=31"
-           title="Test news item">31</a>
-    		</td>
+                    <td class="">31</td>
     ...
     </html>
+
 
 Calendar
 --------
@@ -159,8 +158,8 @@ add calendar event
 
     >>> actor.getControl('Title').value = u'Sandwich Day'
     >>> actor.getControl('Description').value = u'It is the day when a family is preparing sandwiches.'
-    >>> actor.getControl('Event Starts').value = u'11/12/24 10:00'
-    >>> actor.getControl('Event Ends').value = u'11/12/24 18:00'
+    >>> actor.getControl('Event Starts').value = u'11/12/24 10:00 AM'
+    >>> actor.getControl('Event Ends').value = u'11/12/24 18:00 AM'
     >>> actor.getControl('Event Location').value = u'Russia, Yeysk'
     >>> actor.getControl('Event URL').value = u'http://zojax.com/'
     >>> actor.getControl('Contact Name').value = u'Dmitry Suvorov'
@@ -170,30 +169,32 @@ add calendar event
     >>> actor.getControl('Short Name').value = 'sandwich-day'
     >>> actor.getControl('Publish').click()
 
-jsapi
+
+JSapi
+-----
 
 response for day
 
-    >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=day&showdate=12/24/2011")
+    >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=day&showdate=11/12/2024")
     >>> print actor.contents
-    {"start": "12/24/2011 00:00", "issort": true, "end": "12/24/2011 23:23", "events": [["sandwich-day", "Sandwich Day", "12/24/2011 10:00", "12/24/2011 18:00", false, 0, "0", "-1", 1, "Russia, Yeysk", "It is the day when a family is preparing sandwiches.", "", "http://zojax.com/", "Dmitry Suvorov", "suvdim@zojax.com", "1234567890", "We plan some preparing sandwiches."]], "error": null}
+    {"start": "11/12/2024 00:00", "issort": true, "end": "11/12/2024 23:23", "events": [["sandwich-day", "Sandwich Day", "11/12/2024 10:00", "11/12/2024 18:00", false, 0, "0", "-1", 1, "Russia, Yeysk", "It is the day when a family is preparing sandwiches.", "", "http://zojax.com/", "Dmitry Suvorov", "suvdim@zojax.com", "1234567890", "We plan some preparing sandwiches."]], "error": null}
 
 response for week
 
-    >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=week&showdate=12/24/2011")
+    >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=week&showdate=11/12/2024")
     >>> print actor.contents
-    {"start": "12/19/2011 00:00", "issort": true, "end": "12/25/2011 23:23", "events": [["sandwich-day", "Sandwich Day", "12/24/2011 10:00", "12/24/2011 18:00", false, 0, "0", "-1", 1, "Russia, Yeysk", "It is the day when a family is preparing sandwiches.", "", "http://zojax.com/", "Dmitry Suvorov", "suvdim@zojax.com", "1234567890", "We plan some preparing sandwiches."]], "error": null}
+    {"start": "11/11/2024 00:00", "issort": true, "end": "11/17/2024 23:23", "events": [["sandwich-day", "Sandwich Day", "11/12/2024 10:00", "11/12/2024 18:00", false, 0, "0", "-1", 1, "Russia, Yeysk", "It is the day when a family is preparing sandwiches.", "", "http://zojax.com/", "Dmitry Suvorov", "suvdim@zojax.com", "1234567890", "We plan some preparing sandwiches."]], "error": null}
 
 response for month
 
-    >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=month&showdate=12/24/2011")
+    >>> actor.open("http://localhost/space/calendar/CalendarAPI/list?viewtype=month&showdate=11/12/2024")
     >>> print actor.contents
-    {"start": "12/01/2011 00:00", "issort": true, "end": "12/31/2011 23:23", "events": [["sandwich-day", "Sandwich Day", "12/24/2011 10:00", "12/24/2011 18:00", false, 0, "0", "-1", 1, "Russia, Yeysk", "It is the day when a family is preparing sandwiches.", "", "http://zojax.com/", "Dmitry Suvorov", "suvdim@zojax.com", "1234567890", "We plan some preparing sandwiches."]], "error": null}
+    {"start": "11/01/2024 00:00", "issort": true, "end": "11/30/2024 23:23", "events": [["sandwich-day", "Sandwich Day", "11/12/2024 10:00", "11/12/2024 18:00", false, 0, "0", "-1", 1, "Russia, Yeysk", "It is the day when a family is preparing sandwiches.", "", "http://zojax.com/", "Dmitry Suvorov", "suvdim@zojax.com", "1234567890", "We plan some preparing sandwiches."]], "error": null}
 
 
 
 Uninstall product
-----------------
+-----------------
 
     >>> actor.open("http://localhost/settings/")
     >>> actor.getLink('Products management').click()
