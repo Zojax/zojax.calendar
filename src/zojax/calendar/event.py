@@ -15,7 +15,7 @@
 
 $Id$
 """
-from zope import interface, component
+from zope import interface
 from zojax.content.type.item import PersistentItem
 from zojax.richtext.field import RichTextProperty
 from zope.schema.fieldproperty import FieldProperty

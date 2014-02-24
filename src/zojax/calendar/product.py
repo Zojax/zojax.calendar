@@ -22,12 +22,10 @@ from datetime import datetime, timedelta
 from zope import interface
 from zope.component import getUtility
 from zope.app.component.hooks import getSite
-from zope.app.catalog.interfaces import ICatalogIndex
 from zojax.catalog.index import DateTimeValueIndex, DateTimeSetIndex
 
 from zojax.catalog.utils import Indexable
 from zojax.catalog.interfaces import ICatalog
-from zojax.product.utils import registerUtility, unregisterUtility
 
 from interfaces import IEvent, IEventType, ICalendarProduct
 

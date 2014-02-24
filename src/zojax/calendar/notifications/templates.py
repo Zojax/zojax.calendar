@@ -16,28 +16,16 @@ from zojax.mail.interfaces import IMailer
 
 $Id$
 """
-import types
-from datetime import date
 from email.Utils import formataddr
-
-from zope import interface, component
 from zope.proxy import removeAllProxies
 from zope.component import getUtility, queryMultiAdapter
 from zope.traversing.browser import absoluteURL
 from zope.app.component.hooks import getSite
-from zope.size.interfaces import ISized
 from zope.app.intid.interfaces import IIntIds
-from zope.dublincore.interfaces import IDCTimes
-from zope.schema.interfaces import IVocabularyFactory
-
 from zojax.ownership.interfaces import IOwnership
-from zojax.assignment.interfaces import IAssignments
-from zojax.workflow.interfaces import IWorkflowState
 from zojax.principal.profile.interfaces import IPersonalProfile
 from zojax.authentication.utils import getPrincipal
 from zojax.personal.space.interfaces import IPersonalSpace
-
-from zojax.calendar.interfaces import ICalendarEvent
 
 
 class EventNotification(object):

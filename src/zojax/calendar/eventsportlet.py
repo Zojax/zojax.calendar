@@ -20,7 +20,6 @@ from datetime import datetime, timedelta
 
 from zope import interface
 from zope.component import getUtility, queryUtility
-from zope.traversing.api import getPath
 from zope.app.component.hooks import getSite
 from zope.app.intid.interfaces import IIntIds
 

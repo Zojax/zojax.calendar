@@ -18,15 +18,11 @@ $Id$
 from zope import schema, interface
 from zope.i18nmessageid import MessageFactory
 from zojax.content.space.interfaces import IWorkspace, IWorkspaceFactory
-from zojax.content.notifications.interfaces import IContentNotification
-
 from z3c.schema.baseurl import BaseURL
 from z3c.schema.email import RFC822MailAddress
-from zojax.widget.list import SimpleList
 from zojax.widget.radio.field import RadioChoice
 from zojax.richtext.field import RichText
 from zojax.principal.field import UserField
-
 from zojax.portlet.interfaces import _ as pMsg
 from zojax.portlet.interfaces import \
     IPortletManagerWithStatus, ENABLED, statusVocabulary
